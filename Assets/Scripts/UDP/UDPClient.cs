@@ -6,9 +6,10 @@ using System.Threading;
 using System;
 using Sirenix.OdinInspector;
 
+[DefaultExecutionOrder(-19550)]
 public class UDPClient : SingletonMonoBehavior<UDPClient>
 {
-    [Title("Config")]
+    [Title("Server Config")]
     [SerializeField] private string serverIP = "127.0.0.1";
     [SerializeField] private int serverPort = 5005;
     [SerializeField] private int localPort = 5006; 
@@ -18,8 +19,7 @@ public class UDPClient : SingletonMonoBehavior<UDPClient>
     private Thread _receiveThread;
     private bool _isRunning = true;
 
-    #region Các Event nhận dữ liệu
-    
+    #region Events
     public event Action<string> OnStringReceived;
     public event Action<byte[]> OnBytesReceived;
 
