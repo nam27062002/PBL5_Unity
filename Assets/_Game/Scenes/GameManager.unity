@@ -207,7 +207,7 @@ PrefabInstance:
     - target: {fileID: 3308224964178555991, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
       propertyPath: texture
       value: 
-      objectReference: {fileID: 2800000, guid: 4ff02f006bdd4794faf57b499d2b9e0e, type: 3}
+      objectReference: {fileID: 2800000, guid: 2728e2a69359833498a8abf8210451e3, type: 3}
     - target: {fileID: 3308224964178555991, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
       propertyPath: dataType
       value: 1
@@ -219,6 +219,10 @@ PrefabInstance:
     - target: {fileID: 4154344593131797266, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
       propertyPath: m_Name
       value: Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 4154344593131797266, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
       propertyPath: m_LocalPosition.x

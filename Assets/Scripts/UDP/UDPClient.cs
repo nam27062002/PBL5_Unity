@@ -18,11 +18,7 @@ public class UDPClient : SingletonMonoBehavior<UDPClient>
     private IPEndPoint _serverEndPoint;
     private Thread _receiveThread;
     private bool _isRunning = true;
-
-    public event Action<byte[]> OnBytesReceived;
-    public event Action<string> OnStringReceived;
-    public event Action<KeyData, byte[]> OnKeyDataReceived;
-
+    public event Action<KeyData, string> OnStringReceived;
     private void Start()
     {
         ConnectToServer();
@@ -151,17 +147,13 @@ public class UDPClient : SingletonMonoBehavior<UDPClient>
                     AlkawaDebug.LogWarning(ELogCategory.UDP, "Received data too short, ignore");
                     continue;
                 }
-                int keyValue = BitConverter.ToInt32(receivedBytes, 0);
-                KeyData keyData = (KeyData)keyValue;
-                byte[] payload = new byte[receivedBytes.Length - 4];
+                var keyValue = BitConverter.ToInt32(receivedBytes, 0);
+                var keyData = (KeyData)keyValue;
+                var payload = new byte[receivedBytes.Length - 4];
                 Buffer.BlockCopy(receivedBytes, 4, payload, 0, payload.Length);
-
-                OnKeyDataReceived?.Invoke(keyData, payload);
-                OnBytesReceived?.Invoke(payload);
-                string response = Encoding.ASCII.GetString(payload);
+                var response = Encoding.ASCII.GetString(payload);
+                OnStringReceived?.Invoke(keyData, response);
                 AlkawaDebug.Log(ELogCategory.UDP, $"ReceiveData -> Key = {keyData}, Data = {response}");
-
-                OnStringReceived?.Invoke(response);
             }
             catch (SocketException socketEx)
             {
