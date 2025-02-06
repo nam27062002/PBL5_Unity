@@ -4,11 +4,11 @@ using UnityEngine;
 public class Loading_UI : MonoBehaviour
 {
     [SerializeField] private ProcessBar progressBar;
-    [SerializeField] private float timeLoading;
+    [SerializeField] private float timeLoading = 1f;
 
     private void Start()
     {
-        StartCoroutine(StartLoading());
+        CoroutineDispatcher.RunCoroutine(StartLoading());
     }
 
     private IEnumerator StartLoading()

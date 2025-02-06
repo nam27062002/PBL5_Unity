@@ -12,7 +12,7 @@ public enum ELogCategory
 {
     NONE = 0,
     UI,
-    API,
+    UDP,
     LOADSAVE,
     ENGINE,
     AUDIO,
@@ -35,7 +35,7 @@ public class AlkawaDebug
     static AlkawaDebug()
     {
         CategoryColors[ELogCategory.UI] = "#2196F3";        
-        CategoryColors[ELogCategory.API] = "#4CAF50";    
+        CategoryColors[ELogCategory.UDP] = "#4CAF50";    
         CategoryColors[ELogCategory.LOADSAVE] = "#FF9800"; 
         CategoryColors[ELogCategory.ENGINE] = "#607D8B";    
         CategoryColors[ELogCategory.AUDIO] = "#E91E63";
@@ -137,8 +137,9 @@ public class AlkawaDebug
             string colorHex = CategoryColors.GetValueOrDefault(cat, "#FFFFFF");
             categoryPart = $"<color={colorHex}>[{cat}]</color> ";
         }
-        string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
-        string msg = $"[{timestamp}] {categoryPart}{_msg}";
+        // string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+        // string msg = $"[{timestamp}] {categoryPart}{_msg}";
+        string msg = $"{categoryPart}{_msg}";
         switch (sev)
         {
             case ELogSeverity.INFO:

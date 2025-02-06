@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 26845655}
   - component: {fileID: 26845654}
   - component: {fileID: 26845656}
+  - component: {fileID: 26845657}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -179,8 +180,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470621a33db343d384d2b4ab6fb22140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &26845657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26845653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55d42bf3afae41f6a687b3aacd19ea1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &1441984175
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3308224964178555991, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: message
+      value: Hello
+      objectReference: {fileID: 0}
+    - target: {fileID: 3308224964178555991, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 4ff02f006bdd4794faf57b499d2b9e0e, type: 3}
+    - target: {fileID: 3308224964178555991, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: dataType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3308224964178555991, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: udpClient
+      value: 
+      objectReference: {fileID: 26845654}
+    - target: {fileID: 4154344593131797266, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_Name
+      value: Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415406861364823767, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2d04b3c9af60c2f47b1ffb7156122dce, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 26845655}
+  - {fileID: 1441984175}
