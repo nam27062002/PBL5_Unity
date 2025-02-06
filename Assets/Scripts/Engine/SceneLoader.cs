@@ -7,8 +7,6 @@ public enum ESceneType
     Loading,
     GameManager,
     UIManager,
-    MainMenu,
-    Tutorial,
     Game,
 }
 public static class SceneLoader

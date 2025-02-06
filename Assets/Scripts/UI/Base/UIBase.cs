@@ -4,15 +4,15 @@ public abstract class UIBase : MonoBehaviour
 {
     protected virtual string OnOpenMessage => "UIBase: Opened";
     protected virtual string OnCloseMessage => "UIBase: Closed";
-    
+    protected UIManager UIManager => UIManager.Instance;
     protected virtual void Awake()
     {
-        OnRegisterEvent();
+        OnRegisterEvents();
     }
 
     protected virtual void OnDestroy()
     {
-        OnUnRegisterEvent();        
+        OnUnRegisterEvents();        
     }
     
     
@@ -28,6 +28,6 @@ public abstract class UIBase : MonoBehaviour
         AlkawaDebug.Log(ELogCategory.UI, OnOpenMessage);
     }
     
-    protected virtual void OnRegisterEvent(){}
-    protected virtual void OnUnRegisterEvent(){}
+    protected virtual void OnRegisterEvents(){}
+    protected virtual void OnUnRegisterEvents(){}
 }
