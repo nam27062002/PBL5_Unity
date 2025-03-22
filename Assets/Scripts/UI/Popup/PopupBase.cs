@@ -27,9 +27,9 @@ public abstract class PopupBase : UIBase
             closeButton.onClick.RemoveListener(ClosePopup);
     }
 
-    public override void Open(UI_BaseEventParams uiBaseEventParams)
+    public override void Open(IBaseEventParamsUI baseEventParamsUI)
     {
-        base.Open(uiBaseEventParams);
+        base.Open(baseEventParamsUI);
         if (HasShowGreyBackground) UIManager.ShowGreyBackground();
         if (HasPauseGame) Time.timeScale = 0;
     }

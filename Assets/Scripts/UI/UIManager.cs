@@ -19,26 +19,26 @@ public class UIManager : SingletonMonoBehavior<UIManager>
         HideAllPopups();
     }
 
-    public void OpenPopup(PopupType popupType, UI_BaseEventParams uiBaseEventParams)
+    public void OpenPopup(PopupType popupType, IBaseEventParamsUI baseEventParamsUI)
     {
         ClosePopup();
         _currentPopup = allPopups[popupType];
-        _currentPopup.Open(uiBaseEventParams);
+        _currentPopup.Open(baseEventParamsUI);
         menuCanvasGroup.interactable = false;
     }
 
     public void ClosePopup()
     {
-        _currentPopup.Close();
+        _currentPopup?.Close();
         menuCanvasGroup.interactable = true;
         HideGreyBackground();
     }
 
-    public void OpenMenu(MenuType menuType, UI_BaseEventParams uiBaseEventParams)
+    public void OpenMenu(MenuType menuType, IBaseEventParamsUI baseEventParamsUI)
     {
         _currentMenu?.Close();
         _currentMenu = allMenus[menuType];
-        _currentMenu.Open(uiBaseEventParams);
+        _currentMenu.Open(baseEventParamsUI);
     }
 
     #region Sub

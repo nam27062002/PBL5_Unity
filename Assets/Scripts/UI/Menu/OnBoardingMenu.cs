@@ -6,21 +6,25 @@ public class OnBoardingMenu : MenuBase
 {
     [Title("On Boarding"), Space]
     [SerializeField] private Button startButton;
+
+    [Title("Scriptable Object")] 
+    [SerializeField] private ConfirmPopupEventParams confirmPopupEventParams;
     
     protected override void OnRegisterEvents()
     {
-        base.OnRegisterEvents();
         startButton.onClick.AddListener(OnStartButtonClicked);
+        base.OnRegisterEvents();
     }
 
     protected override void OnUnRegisterEvents()
     {
-        base.OnUnRegisterEvents();
         startButton.onClick.RemoveListener(OnStartButtonClicked);
+        base.OnUnRegisterEvents();
     }
 
     private void OnStartButtonClicked()
     {
-        AlkawaDebug.Log(ELogCategory.UI, "OnStartButtonClicked");
+        if (!LoadSaveManager.Instance.AllowUseCamera)
+            UIManager.OpenPopup(PopupType.Confirm, confirmPopupEventParams);
     }
 }

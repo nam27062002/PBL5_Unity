@@ -8,7 +8,7 @@ public enum DataType
     Message,
 }
 
-public class UDPTesting : MonoBehaviour
+public class TCPTesting : MonoBehaviour
 {
     [SerializeField] private TCPClient tcpClient;
     [SerializeField] private DataType dataType;

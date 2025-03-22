@@ -16,7 +16,7 @@ public abstract class UIBase : MonoBehaviour
     }
     
     
-    public virtual void Open(UI_BaseEventParams uiBaseEventParams)
+    public virtual void Open(IBaseEventParamsUI baseEventParamsUI)
     {
         gameObject.SetActiveIfNeeded(true);   
         AlkawaDebug.Log(ELogCategory.UI, OnOpenMessage);
@@ -25,7 +25,7 @@ public abstract class UIBase : MonoBehaviour
     public virtual void Close()
     {
         gameObject.SetActive(false);
-        AlkawaDebug.Log(ELogCategory.UI, OnOpenMessage);
+        AlkawaDebug.Log(ELogCategory.UI, OnCloseMessage);
     }
     
     protected virtual void OnRegisterEvents(){}
