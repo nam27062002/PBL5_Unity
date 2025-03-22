@@ -10,9 +10,9 @@ public enum DataType
 
 public class UDPTesting : MonoBehaviour
 {
-    [SerializeField] private UDPClient udpClient;
+    [SerializeField] private TCPClient tcpClient;
     [SerializeField] private DataType dataType;
-    
+
     [SerializeField, ShowIf(nameof(IsTexture))]
     private Texture2D texture;
 
@@ -25,7 +25,7 @@ public class UDPTesting : MonoBehaviour
     [Button("Send Data To Server")]
     private void SendDataToServer()
     {
-        udpClient.ConnectToServer();
+        tcpClient.ConnectToServer();
 
         if (IsTexture)
         {
@@ -38,11 +38,11 @@ public class UDPTesting : MonoBehaviour
             resizedTexture.Apply();
             RenderTexture.active = previous;
             RenderTexture.ReleaseTemporary(rt);
-            udpClient.SendData(KeyData.LetterPrediction, resizedTexture);
+            tcpClient.SendData(KeyData.LetterPrediction, resizedTexture);
         }
         else if (IsMessage)
         {
-            udpClient.SendData(KeyData.LetterPrediction, message);
+            tcpClient.SendData(KeyData.LetterPrediction, message);
         }
     }
 }

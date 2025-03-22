@@ -12,7 +12,7 @@ public enum ELogCategory
 {
     NONE = 0,
     UI,
-    UDP,
+    TCP,
     LOADSAVE,
     ENGINE,
     AUDIO,
@@ -34,14 +34,14 @@ public class AlkawaDebug
 
     static AlkawaDebug()
     {
-        CategoryColors[ELogCategory.UI] = "#2196F3";        
-        CategoryColors[ELogCategory.UDP] = "#4CAF50";    
-        CategoryColors[ELogCategory.LOADSAVE] = "#FF9800"; 
-        CategoryColors[ELogCategory.ENGINE] = "#607D8B";    
+        CategoryColors[ELogCategory.UI] = "#2196F3";
+        CategoryColors[ELogCategory.TCP] = "#4CAF50";
+        CategoryColors[ELogCategory.LOADSAVE] = "#FF9800";
+        CategoryColors[ELogCategory.ENGINE] = "#607D8B";
         CategoryColors[ELogCategory.AUDIO] = "#E91E63";
         CategoryColors[ELogCategory.GAMEPLAY] = "#FFEB3B";
     }
-    
+
     public static void SetCategoryEnabled(ELogCategory cat, bool enabled)
     {
         if (enabled)
@@ -104,7 +104,7 @@ public class AlkawaDebug
 
         InternalLog(cat, ELogSeverity.ERROR, msg, context);
     }
-    
+
     [Conditional("USE_DEBUG")]
     public static void LogException(ELogCategory cat, Exception exception, string msg = "", Object context = null,
         [CallerMemberName] string caller = "",
@@ -118,7 +118,7 @@ public class AlkawaDebug
         string fullMsg = $"{debugInfo}{msg}\nException: {exception}";
         InternalLog(cat, ELogSeverity.ERROR, fullMsg, context);
     }
-    
+
     [Conditional("USE_DEBUG")]
     public static void LogFormat(ELogCategory cat, string format, Object context = null, params object[] args)
     {
@@ -127,7 +127,7 @@ public class AlkawaDebug
         string msg = string.Format(format, args);
         InternalLog(cat, ELogSeverity.INFO, msg, context);
     }
-    
+
     [Conditional("USE_DEBUG")]
     private static void InternalLog(ELogCategory cat, ELogSeverity sev, string _msg, Object context)
     {

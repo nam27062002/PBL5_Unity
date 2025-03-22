@@ -20,7 +20,7 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 
         _webCamImage = image;
         WebCamDevice device = GetCurrentWebCamDevice();
-        
+
         _webCamTexture = new WebCamTexture(device.name)
         {
             requestedFPS = ApplicationConfig.TargetFrameRate,
@@ -30,11 +30,11 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 
         _webCamImage.texture = _webCamTexture;
         _webCamImage.material.mainTexture = _webCamTexture;
-        
+
         UpdateFlip();
         _webCamTexture.Play();
 
-        _processingTexture = new Texture2D(_webCamTexture.width, 
+        _processingTexture = new Texture2D(_webCamTexture.width,
             _webCamTexture.height, TextureFormat.RGB24, false);
     }
 
@@ -65,8 +65,8 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 
     private WebCamDevice GetCurrentWebCamDevice()
     {
-        return WebCamDevices.Length > DEFAULT_WEBCAM_INDEX 
-            ? WebCamDevices[DEFAULT_WEBCAM_INDEX] 
+        return WebCamDevices.Length > DEFAULT_WEBCAM_INDEX
+            ? WebCamDevices[DEFAULT_WEBCAM_INDEX]
             : WebCamDevices[0];
     }
 
@@ -104,6 +104,6 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         Color32[] pixels = _webCamTexture.GetPixels32();
         _processingTexture.SetPixels32(pixels);
         _processingTexture.Apply();
-        UDPClient.Instance.SendData(KeyData.LetterPrediction, _processingTexture);
+        TCPClient.Instance.SendData(KeyData.LetterPrediction, _processingTexture);
     }
 }
