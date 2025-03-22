@@ -16,7 +16,7 @@ public abstract class UIBase : MonoBehaviour
     }
     
     
-    public virtual void Open()
+    public virtual void Open(UI_BaseEventParams uiBaseEventParams)
     {
         gameObject.SetActiveIfNeeded(true);   
         AlkawaDebug.Log(ELogCategory.UI, OnOpenMessage);

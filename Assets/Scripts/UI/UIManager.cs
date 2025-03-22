@@ -19,11 +19,11 @@ public class UIManager : SingletonMonoBehavior<UIManager>
         HideAllPopups();
     }
 
-    public void OpenPopup(PopupType popupType)
+    public void OpenPopup(PopupType popupType, UI_BaseEventParams uiBaseEventParams)
     {
         ClosePopup();
         _currentPopup = allPopups[popupType];
-        _currentPopup.Open();
+        _currentPopup.Open(uiBaseEventParams);
         menuCanvasGroup.interactable = false;
     }
 
@@ -34,11 +34,11 @@ public class UIManager : SingletonMonoBehavior<UIManager>
         HideGreyBackground();
     }
 
-    public void OpenMenu(MenuType menuType)
+    public void OpenMenu(MenuType menuType, UI_BaseEventParams uiBaseEventParams)
     {
         _currentMenu?.Close();
         _currentMenu = allMenus[menuType];
-        _currentMenu.Open();
+        _currentMenu.Open(uiBaseEventParams);
     }
 
     #region Sub
