@@ -14,7 +14,7 @@ public class ProcessBar : MonoBehaviour
         processText.gameObject.SetActiveIfNeeded(showText);
     }
 
-    public virtual void SetValue(float value)
+    protected virtual void SetValue(float value)
     {
         progressBar.fillAmount = value;
     }
