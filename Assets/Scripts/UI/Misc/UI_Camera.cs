@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class UI_Camera : MonoBehaviour
 {
-    public RawImage rawImage;
-    
+    [SerializeField] private RawImage rawImage;
+
     public void OnEnable()
     {
         WebCamManager.Instance.StartWebCam(rawImage);
@@ -14,5 +14,15 @@ public class UI_Camera : MonoBehaviour
     {
         if (WebCamManager.Instance != null)
             WebCamManager.Instance.StopWebCam();
+    }
+
+    public void ShowWebCam()
+    {
+        gameObject.SetActiveIfNeeded(true);
+    }
+
+    public void HideWebCam()
+    {
+        gameObject.SetActiveIfNeeded(false);
     }
 }

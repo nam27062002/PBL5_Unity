@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 {
-    
+
     [SerializeField] private bool flipHorizontal = true;
-    
+
     private static WebCamDevice[] WebCamDevices => WebCamTexture.devices;
     public static bool HasWebCamDevice => WebCamTexture.devices.Length > 0;
     private WebCamTexture _webCamTexture;
@@ -88,25 +88,25 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         UpdateFlip();
     }
 
-    private void Update()
-    {
-        if (_webCamTexture == null || !_webCamTexture.isPlaying) return;
+    // private void Update()
+    // {
+    //     if (_webCamTexture == null || !_webCamTexture.isPlaying) return;
 
-        try
-        {
-            ProcessWebcamFrame();
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Error processing webcam frame: {e.Message}");
-        }
-    }
+    //     try
+    //     {
+    //         ProcessWebcamFrame();
+    //     }
+    //     catch (System.Exception e)
+    //     {
+    //         Debug.LogError($"Error processing webcam frame: {e.Message}");
+    //     }
+    // }
 
-    private void ProcessWebcamFrame()
-    {
-        Color32[] pixels = _webCamTexture.GetPixels32();
-        _processingTexture.SetPixels32(pixels);
-        _processingTexture.Apply();
-        TCPClient.Instance.SendData(KeyData.LetterPrediction, _processingTexture);
-    }
+    // private void ProcessWebcamFrame()
+    // {
+    //     Color32[] pixels = _webCamTexture.GetPixels32();
+    //     _processingTexture.SetPixels32(pixels);
+    //     _processingTexture.Apply();
+    //     TCPClient.Instance.SendData(KeyData.LetterPrediction, _processingTexture);
+    // }
 }
