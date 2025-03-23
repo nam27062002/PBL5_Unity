@@ -13,15 +13,17 @@ public class ConfirmPopup : PopupBase
     [SerializeField] private TextMeshProUGUI cancelText;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
-
+    [SerializeField] private Button okButton;
     private UnityEvent _onConfirm;
     private UnityEvent _onCancel;
+    private UnityEvent _onOk;
     
     protected override void OnRegisterEvents()
     {
         base.OnRegisterEvents();
         confirmButton.onClick.AddListener(OnConfirmButtonClick);
         cancelButton.onClick.AddListener(OnCancelButtonClick);
+        okButton.onClick.AddListener(OnOkButtonClick);
     }
 
     protected override void OnUnRegisterEvents()
@@ -29,6 +31,7 @@ public class ConfirmPopup : PopupBase
         base.OnUnRegisterEvents();
         confirmButton.onClick.RemoveListener(OnConfirmButtonClick);
         cancelButton.onClick.RemoveListener(OnCancelButtonClick);
+        okButton.onClick.RemoveListener(OnOkButtonClick);
     }
     
     public override void Open(IBaseEventParamsUI baseEventParamsUI)
@@ -42,6 +45,11 @@ public class ConfirmPopup : PopupBase
             cancelText.SetText(confirmPopupEventParams.cancelText);
             _onConfirm = confirmPopupEventParams.onConfirm;
             _onCancel = confirmPopupEventParams.onCancel;
+            _onOk = confirmPopupEventParams.onOk;
+            
+            confirmButton.gameObject.SetActiveIfNeeded(confirmPopupEventParams.confirmPopupType == ConfirmPopupType.YesNo);
+            cancelButton.gameObject.SetActiveIfNeeded(confirmPopupEventParams.confirmPopupType == ConfirmPopupType.YesNo);
+            okButton.gameObject.SetActiveIfNeeded(confirmPopupEventParams.confirmPopupType == ConfirmPopupType.Okay);
         }
     }
 
@@ -57,6 +65,12 @@ public class ConfirmPopup : PopupBase
         ClosePopup();
     }
 
+    private void OnOkButtonClick()
+    {
+        _onOk?.Invoke();
+        ClosePopup();
+    }
+    
     protected override void ClosePopup()
     {
         base.ClosePopup();

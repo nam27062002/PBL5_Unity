@@ -3,10 +3,13 @@ using UnityEngine.UI;
 
 public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 {
-    public static WebCamDevice[] WebCamDevices => WebCamTexture.devices;
+    
+    [SerializeField] private bool flipHorizontal = true;
+    
+    private static WebCamDevice[] WebCamDevices => WebCamTexture.devices;
+    public static bool HasWebCamDevice => WebCamTexture.devices.Length > 0;
     private WebCamTexture _webCamTexture;
     private RawImage _webCamImage;
-    [SerializeField] private bool flipHorizontal = true;
     private Texture2D _processingTexture;
     private const int DEFAULT_WEBCAM_INDEX = 0;
 

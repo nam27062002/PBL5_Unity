@@ -6,9 +6,6 @@ public class OnBoardingMenu : MenuBase
 {
     [Title("On Boarding"), Space]
     [SerializeField] private Button startButton;
-
-    [Title("Scriptable Object")] 
-    [SerializeField] private ConfirmPopupEventParams confirmPopupEventParams;
     
     protected override void OnRegisterEvents()
     {
@@ -25,6 +22,19 @@ public class OnBoardingMenu : MenuBase
     private void OnStartButtonClicked()
     {
         if (!LoadSaveManager.Instance.AllowUseCamera)
-            UIManager.OpenPopup(PopupType.Confirm, confirmPopupEventParams);
+        {
+            UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.allowUseCameraPopup);
+        }
+        else
+        {
+            if (WebCamManager.HasWebCamDevice)
+            {
+                
+            }
+            else
+            {
+                UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.cameraNotDetectedPopup);   
+            }
+        }
     }
 }

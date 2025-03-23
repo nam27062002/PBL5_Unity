@@ -53,7 +53,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuType: 1
   startButton: {fileID: 4487706365963695848}
-  confirmPopupEventParams: {fileID: 11400000, guid: c19f4cc59b4cb8a4694ee0a7412e8a7c, type: 2}
+  allowUseCameraPopup: {fileID: 11400000, guid: c19f4cc59b4cb8a4694ee0a7412e8a7c, type: 2}
+  cameraNotDetectedPopup: {fileID: 11400000, guid: 9d341f261385bcb47949547de323da98, type: 2}
 --- !u!1 &5637742714863941942
 GameObject:
   m_ObjectHideFlags: 0
