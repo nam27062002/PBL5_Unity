@@ -52,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -158,28 +158,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Selected_UI_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1
-        width: 14
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d909233bc4bff89b0800000000000000
-      internalID: -5075561948180737891
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Button_Selected_UI_1
       rect:
         serializedVersion: 2
@@ -188,7 +166,7 @@ TextureImporter:
         width: 354
         height: 92
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -197,28 +175,6 @@ TextureImporter:
       bones: []
       spriteID: 9bd71e8b34a9e8b10800000000000000
       internalID: 1985694101372239289
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Button_Selected_UI_2
-      rect:
-        serializedVersion: 2
-        x: 370
-        y: 22
-        width: 18
-        height: 70
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f94f3b62cfd09ef50800000000000000
-      internalID: 6911070479808984223
       vertices: []
       indices: 
       edges: []
