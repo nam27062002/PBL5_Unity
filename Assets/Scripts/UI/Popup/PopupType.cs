@@ -3,4 +3,5 @@
     None = 0,
     CheckWebCam = 1,
     Confirm = 2,
+    OnBoarding = 3
 }

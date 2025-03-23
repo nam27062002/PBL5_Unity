@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 119d685f787097942a195221babe159a
+guid: 08decdabda7e7ba47b0cd89ae963ea1c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 328056562581841248
-    second: Button_Tap_UI_0
-  - first:
-      213: -1912777821979568023
-    second: Button_Tap_UI_1
-  - first:
-      213: -2029938963703887761
-    second: Button_Tap_UI_2
+      213: 3959922740387019359
+    second: X_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -90,7 +84,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Win64
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -103,7 +97,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
+    buildTarget: Win64
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -158,23 +152,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Tap_UI_1
+      name: X_0
       rect:
         serializedVersion: 2
-        x: 9
+        x: 0
         y: 0
-        width: 320
-        height: 82
+        width: 41
+        height: 50
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 96899aa84b27475e0800000000000000
-      internalID: -1912777821979568023
+      spriteID: f5a72c670c874f630800000000000000
+      internalID: 3959922740387019359
       vertices: []
       indices: 
       edges: []
@@ -183,7 +177,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -192,10 +186,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Button_Tap_UI_0: 328056562581841248
-      Button_Tap_UI_1: -1912777821979568023
-      Button_Tap_UI_2: -2029938963703887761
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

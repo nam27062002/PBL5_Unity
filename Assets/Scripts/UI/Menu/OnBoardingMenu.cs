@@ -29,7 +29,7 @@ public class OnBoardingMenu : MenuBase
         {
             if (WebCamManager.HasWebCamDevice)
             {
-                
+                UIManager.OpenPopup(PopupType.OnBoarding, null);
             }
             else
             {
