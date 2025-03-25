@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 7cb37fbaefd6c704bb78009811c73b62
+guid: dc27f1b13cb8c204190267d216b88b79
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3910422488431151610
-    second: btn_2_0
+      213: -2654789932136512525
+    second: ASL-Alphabet-J_0
+  - first:
+      213: -6296041399963590391
+    second: ASL-Alphabet-J_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +55,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 25, y: 30, z: 26, w: 21}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -152,23 +155,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: btn_2_0
+      name: ASL-Alphabet-J_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 138
-        height: 138
+        x: 776
+        y: 311
+        width: 706
+        height: 1233
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: af943a0f88c944630800000000000000
-      internalID: 3910422488431151610
+      spriteID: 3f348b55f9a482bd0800000000000000
+      internalID: -2654789932136512525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ASL-Alphabet-J_1
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 23
+        width: 2152
+        height: 2114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 901640064b7ff98a0800000000000000
+      internalID: -6296041399963590391
       vertices: []
       indices: 
       edges: []
@@ -178,7 +203,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -187,7 +212,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      btn_2_0: 3910422488431151610
+      ASL-Alphabet-J_0: -2654789932136512525
+      ASL-Alphabet-J_1: -6296041399963590391
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

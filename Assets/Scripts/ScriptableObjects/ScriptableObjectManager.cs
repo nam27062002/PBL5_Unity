@@ -4,4 +4,6 @@ public class ScriptableObjectManager : SingletonMonoBehavior<ScriptableObjectMan
 {
     [TabGroup("UI", "ConfirmPopup")] public ConfirmPopupEventParams allowUseCameraPopup;
     [TabGroup("UI", "ConfirmPopup")] public ConfirmPopupEventParams cameraNotDetectedPopup;       
+    
+    [TabGroup("Game Config", "Letter")] public LettersConfig lettersConfig;
 }
