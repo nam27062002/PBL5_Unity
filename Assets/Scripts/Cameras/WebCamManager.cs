@@ -3,9 +3,7 @@ using UnityEngine.UI;
 
 public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 {
-
     [SerializeField] private bool flipHorizontal = true;
-
     private static WebCamDevice[] WebCamDevices => WebCamTexture.devices;
     private WebCamTexture _webCamTexture;
     private RawImage _webCamImage;
@@ -24,10 +22,10 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 
         _webCamImage = image;
         WebCamDevice device = GetCurrentWebCamDevice();
-
+        const int requestedFPS = ApplicationConfig.TargetFrameRate / 2;
         _webCamTexture = new WebCamTexture(device.name)
         {
-            requestedFPS = ApplicationConfig.TargetFrameRate,
+            requestedFPS = requestedFPS,
             requestedWidth = 1280,
             requestedHeight = 720
         };
@@ -38,8 +36,7 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         UpdateFlip();
         _webCamTexture.Play();
 
-        ProcessingTexture = new Texture2D(_webCamTexture.width,
-            _webCamTexture.height, TextureFormat.RGB24, false);
+        ProcessingTexture = new Texture2D(_webCamTexture.width, _webCamTexture.height, TextureFormat.RGB24, false);
     }
 
     public void StopWebCam()

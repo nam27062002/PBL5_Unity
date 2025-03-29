@@ -256,6 +256,10 @@ PrefabInstance:
       propertyPath: lettersConfig
       value: 
       objectReference: {fileID: 11400000, guid: 103495fb10c1e8b41a423b828dd1f00d, type: 2}
+    - target: {fileID: 4640833744863014964, guid: 645da4fd04ec2364a8a309ef1ad25aa3, type: 3}
+      propertyPath: flipMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: b582a06410191244e9b0516c2299b3ae, type: 2}
     - target: {fileID: 5926706479314907259, guid: 645da4fd04ec2364a8a309ef1ad25aa3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

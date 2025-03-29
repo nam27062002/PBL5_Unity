@@ -150,8 +150,11 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
                         bytesRead += _stream.Read(payloadBuffer, bytesRead, payloadLength - bytesRead);
                     }
                     var response = Encoding.ASCII.GetString(payloadBuffer);
-
-                    OnStringReceived?.Invoke(keyData, response);
+                    
+                    UnityMainThreadDispatcher.Instance.Enqueue(() => 
+                    {
+                        OnStringReceived?.Invoke(keyData, response);
+                    });
                     // AlkawaDebug.Log(ELogCategory.TCP, $"ReceiveData -> Key = {keyData}, Data = {response}");
                 }
                 else

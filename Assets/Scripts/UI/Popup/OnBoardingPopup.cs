@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class OnBoardingPopup : PopupBase
@@ -11,6 +12,7 @@ public class OnBoardingPopup : PopupBase
     public class StepConfig
     {
         public string message;
+        public UnityEvent onStart;
     }
     
     [Title("OnBoarding Popup"), Space]
@@ -23,8 +25,20 @@ public class OnBoardingPopup : PopupBase
     [Title("Config"), Space]
     [SerializeField] private TextMeshProUGUI message;
     [SerializeField] private List<StepConfig> stepConfigs;
-    private int _stepIndex;
 
+    [Space] 
+    [SerializeField] private GameObject loadingObject;
+    [SerializeField] private Image loadingImage;
+    [SerializeField] private float loadingTime = 3f;
+    
+    [Title("Optimization Settings")]
+    [SerializeField] private float sendInterval = 0.1f;
+    
+    private float _timer;
+    private int _stepIndex;
+    private float timeSinceLastSend = 0f;
+    private bool _hasHand;
+    
     protected override void OnRegisterEvents()
     {
         base.OnRegisterEvents();
@@ -42,7 +56,26 @@ public class OnBoardingPopup : PopupBase
         base.OnUpdate();
         if (_stepIndex == 1)
         {
-            TCPClient.Instance.SendData(KeyData.HandRecognition, WebCamManager.Instance.ProcessingTexture);
+            timeSinceLastSend += Time.unscaledDeltaTime;
+            if (timeSinceLastSend >= sendInterval)
+            {
+                timeSinceLastSend = 0f;
+                TCPClient.Instance.SendData(KeyData.HandRecognition, WebCamManager.Instance.ProcessingTexture);
+            }
+            if (_hasHand)
+            {
+                _timer += Time.unscaledDeltaTime; 
+                loadingImage.fillAmount = _timer / loadingTime;
+                if (_timer >= loadingTime)
+                {
+                    Debug.Log("NT - finish");
+                }
+            }
+            else
+            {
+                _timer = 0;
+                loadingImage.fillAmount = 0;
+            }
         }
     }
 
@@ -68,5 +101,17 @@ public class OnBoardingPopup : PopupBase
         if (_stepIndex >= stepConfigs.Count) return;
         var stepConfig = stepConfigs[_stepIndex];
         message.SetText(stepConfig.message);
+        stepConfig.onStart?.Invoke();
+    }
+
+    public void HandleHandRecognition()
+    {
+        TCPClient.Instance.OnStringReceived += OnStringReceived;
+    }
+
+    private void OnStringReceived(KeyData _, string hasHandStr)
+    {
+        _hasHand = Convert.ToBoolean(hasHandStr);
+        loadingObject.gameObject.SetActiveIfNeeded(_hasHand);
     }
 }
