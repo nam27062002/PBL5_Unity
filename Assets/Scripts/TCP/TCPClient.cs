@@ -53,20 +53,12 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
         {
             AlkawaDebug.Log(ELogCategory.TCP, "Disconnecting from server...");
             _isRunning = false;
-
-            if (_stream != null)
-            {
-                _stream.Close();
-            }
-            if (_tcpClient != null)
-            {
-                _tcpClient.Close();
-            }
-            if (_receiveThread != null && _receiveThread.IsAlive)
+            _stream?.Close();
+            _tcpClient?.Close();
+            if (_receiveThread is { IsAlive: true })
             {
                 _receiveThread.Join();
             }
-
             AlkawaDebug.Log(ELogCategory.TCP, "Disconnected successfully.");
         }
         catch (Exception ex)
@@ -110,7 +102,7 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
         Buffer.BlockCopy(payload, 0, finalData, 8, payload.Length);
 
         SendDataInternal(finalData);
-        AlkawaDebug.Log(ELogCategory.TCP, $"Sending data to TCP | key = {keyData} | type = {data.GetType()} | payload = {payload.Length}");
+        // AlkawaDebug.Log(ELogCategory.TCP, $"Sending data to TCP | key = {keyData} | type = {data.GetType()} | payload = {payload.Length}");
     }
 
     private void SendDataInternal(byte[] data)
@@ -160,7 +152,7 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
                     var response = Encoding.ASCII.GetString(payloadBuffer);
 
                     OnStringReceived?.Invoke(keyData, response);
-                    AlkawaDebug.Log(ELogCategory.TCP, $"ReceiveData -> Key = {keyData}, Data = {response}");
+                    // AlkawaDebug.Log(ELogCategory.TCP, $"ReceiveData -> Key = {keyData}, Data = {response}");
                 }
                 else
                 {

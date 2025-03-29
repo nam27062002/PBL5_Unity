@@ -8,7 +8,6 @@ public class LoadSaveManager : SingletonMonoBehavior<LoadSaveManager>
     private const string AllowUseCameraKey = "AllowUseCamera";
     #endregion
     
-
     public bool OnBoardingFinished
     {
         get => PlayerPrefs.GetInt(OnBoardingKey, 0) == 1;

@@ -7,22 +7,20 @@ using UnityEngine.UI;
 
 public class OnBoardingPopup : PopupBase
 {
-
     [Serializable]
     public class StepConfig
     {
         public string message;
     }
-
-
+    
     [Title("OnBoarding Popup"), Space]
     [SerializeField] private Button startButton;
     [SerializeField] private Button skipButton;
 
-    [Title("Scripts")]
+    [Title("Scripts"), Space]
     [SerializeField] private UI_Camera uiCamera;
 
-    [Title("Config")]
+    [Title("Config"), Space]
     [SerializeField] private TextMeshProUGUI message;
     [SerializeField] private List<StepConfig> stepConfigs;
     private int _stepIndex;
@@ -37,6 +35,15 @@ public class OnBoardingPopup : PopupBase
     {
         base.OnUnRegisterEvents();
         startButton.onClick.RemoveListener(OnStartButtonClicked);
+    }
+    
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+        if (_stepIndex == 1)
+        {
+            TCPClient.Instance.SendData(KeyData.HandRecognition, WebCamManager.Instance.ProcessingTexture);
+        }
     }
 
     public override void Open(IBaseEventParamsUI baseEventParamsUI)

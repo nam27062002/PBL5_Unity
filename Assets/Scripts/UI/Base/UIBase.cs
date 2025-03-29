@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class UIBase : MonoBehaviour
 {
@@ -14,7 +15,16 @@ public abstract class UIBase : MonoBehaviour
     {
         OnUnRegisterEvents();        
     }
-    
+
+    protected void Update()
+    {
+        OnUpdate();
+    }
+
+    protected virtual void OnUpdate()
+    {
+        
+    }
     
     public virtual void Open(IBaseEventParamsUI baseEventParamsUI)
     {

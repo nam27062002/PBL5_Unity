@@ -7,11 +7,12 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
     [SerializeField] private bool flipHorizontal = true;
 
     private static WebCamDevice[] WebCamDevices => WebCamTexture.devices;
-    public static bool HasWebCamDevice => WebCamTexture.devices.Length > 0;
     private WebCamTexture _webCamTexture;
     private RawImage _webCamImage;
-    private Texture2D _processingTexture;
     private const int DEFAULT_WEBCAM_INDEX = 0;
+    
+    public static bool HasWebCamDevice => WebCamTexture.devices.Length > 0;
+    public Texture2D ProcessingTexture { get; private set; }
 
     public void StartWebCam(RawImage image)
     {
@@ -37,7 +38,7 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         UpdateFlip();
         _webCamTexture.Play();
 
-        _processingTexture = new Texture2D(_webCamTexture.width,
+        ProcessingTexture = new Texture2D(_webCamTexture.width,
             _webCamTexture.height, TextureFormat.RGB24, false);
     }
 
@@ -48,10 +49,10 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         try
         {
             _webCamTexture.Stop();
-            if (_processingTexture != null)
+            if (ProcessingTexture != null)
             {
-                Destroy(_processingTexture);
-                _processingTexture = null;
+                Destroy(ProcessingTexture);
+                ProcessingTexture = null;
             }
         }
         catch (System.Exception e)
@@ -60,6 +61,14 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         }
     }
 
+    public void Update()
+    {
+        if (_webCamTexture == null || !_webCamTexture.isPlaying) return;
+        var pixels = _webCamTexture.GetPixels32();
+        ProcessingTexture.SetPixels32(pixels);
+        ProcessingTexture.Apply();
+    }
+    
     protected override void OnDestroy()
     {
         StopWebCam();
@@ -87,26 +96,4 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         flipHorizontal = !flipHorizontal;
         UpdateFlip();
     }
-
-    // private void Update()
-    // {
-    //     if (_webCamTexture == null || !_webCamTexture.isPlaying) return;
-
-    //     try
-    //     {
-    //         ProcessWebcamFrame();
-    //     }
-    //     catch (System.Exception e)
-    //     {
-    //         Debug.LogError($"Error processing webcam frame: {e.Message}");
-    //     }
-    // }
-
-    // private void ProcessWebcamFrame()
-    // {
-    //     Color32[] pixels = _webCamTexture.GetPixels32();
-    //     _processingTexture.SetPixels32(pixels);
-    //     _processingTexture.Apply();
-    //     TCPClient.Instance.SendData(KeyData.LetterPrediction, _processingTexture);
-    // }
 }
