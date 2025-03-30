@@ -150,8 +150,8 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
                         bytesRead += _stream.Read(payloadBuffer, bytesRead, payloadLength - bytesRead);
                     }
                     var response = Encoding.ASCII.GetString(payloadBuffer);
-                    
-                    UnityMainThreadDispatcher.Instance.Enqueue(() => 
+
+                    UnityMainThreadDispatcher.Instance.Enqueue(() =>
                     {
                         OnStringReceived?.Invoke(keyData, response);
                     });

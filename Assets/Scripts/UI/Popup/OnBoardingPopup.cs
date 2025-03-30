@@ -37,6 +37,8 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private Image loadingImage;
     [SerializeField] private float loadingTime = 3f;
     [SerializeField] private LetterType letterTypeTutorial;
+    [SerializeField] private TextMeshProUGUI predictedLetter;
+    [SerializeField] private TextMeshProUGUI confidenceText;
 
     [Title("Optimization Settings")]
     [SerializeField] private float sendInterval = 0.1f;
@@ -45,6 +47,8 @@ public class OnBoardingPopup : PopupBase
     private int _stepIndex;
     private float timeSinceLastSend = 0f;
     private bool _hasHand;
+    private int _correctPredictionCount = 0;
+    private const int REQUIRED_CORRECT_PREDICTIONS = 5;
 
     protected override void OnRegisterEvents()
     {
@@ -153,6 +157,8 @@ public class OnBoardingPopup : PopupBase
         uiLetter.Hide();
         startButton.gameObject.SetActiveIfNeeded(true);
         readyButton.gameObject.SetActiveIfNeeded(false);
+        predictedLetter.SetText("");
+        confidenceText.SetText("");
         _stepIndex = 0;
     }
 
@@ -210,6 +216,45 @@ public class OnBoardingPopup : PopupBase
 
     private void OnStringReceivedHandleLetterPrediction(KeyData _, string letterStr)
     {
-        Debug.Log("Letter: " + letterStr);
+        Debug.Log("letterStr: " + letterStr);
+        if (letterStr.StartsWith("Predicted: "))
+        {
+            string[] parts = letterStr.Split(',');
+            string letter = parts[0].Replace("Predicted: ", "").Trim();
+            string confidenceStr = parts[1].Replace("Confidence: ", "").Trim();
+            float confidence = float.Parse(confidenceStr) * 100f;
+
+            // Xử lý predictedLetter
+            bool isCorrect = letter == letterTypeTutorial.ToString();
+            Color letterColor = isCorrect ? Color.green : Color.red;
+            predictedLetter.SetText($"Predict: {letter}");
+            predictedLetter.color = letterColor;
+
+            // Xử lý confidence
+            Color confidenceColor = (!isCorrect || confidence < 70f) ? Color.red : Color.green;
+            confidenceText.SetText($"Confidence: {confidence:F2}%");
+            confidenceText.color = confidenceColor;
+
+            if (isCorrect)
+            {
+                _correctPredictionCount++;
+                if (_correctPredictionCount >= REQUIRED_CORRECT_PREDICTIONS)
+                {
+                    Debug.Log("Win");
+                    _correctPredictionCount = 0;
+                }
+            }
+            else
+            {
+                _correctPredictionCount = 0;
+            }
+        }
+        else
+        {
+            _correctPredictionCount = 0;
+            predictedLetter.SetText("Cannot process image");
+            predictedLetter.color = Color.red;
+            confidenceText.SetText("");
+        }
     }
 }

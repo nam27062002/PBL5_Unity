@@ -22,7 +22,7 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
 
         _webCamImage = image;
         WebCamDevice device = GetCurrentWebCamDevice();
-        const int requestedFPS = ApplicationConfig.TargetFrameRate / 2;
+        const int requestedFPS = ApplicationConfig.TargetFrameRate;
         _webCamTexture = new WebCamTexture(device.name)
         {
             requestedFPS = requestedFPS,
