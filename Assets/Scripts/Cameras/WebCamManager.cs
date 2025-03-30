@@ -8,7 +8,7 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
     private WebCamTexture _webCamTexture;
     private RawImage _webCamImage;
     private const int DEFAULT_WEBCAM_INDEX = 0;
-    
+
     public static bool HasWebCamDevice => WebCamTexture.devices.Length > 0;
     public Texture2D ProcessingTexture { get; private set; }
 
@@ -65,7 +65,8 @@ public class WebCamManager : SingletonMonoBehavior<WebCamManager>
         ProcessingTexture.SetPixels32(pixels);
         ProcessingTexture.Apply();
     }
-    
+
+
     protected override void OnDestroy()
     {
         StopWebCam();

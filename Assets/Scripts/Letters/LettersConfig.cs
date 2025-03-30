@@ -5,9 +5,10 @@ using UnityEngine;
 public class LettersConfig : ScriptableObject
 {
     [SerializeField] SerializableDictionary<LetterType, Letter> letters;
-    
+
     public SerializableDictionary<LetterType, Letter> Letters => letters;
 }
+
 
 [Serializable]
 public class Letter
