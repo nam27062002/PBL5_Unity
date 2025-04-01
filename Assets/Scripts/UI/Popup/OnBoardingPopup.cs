@@ -23,6 +23,8 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private Button startButton;
     [SerializeField] private Button skipButton;
     [SerializeField] private Button readyButton;
+    [SerializeField] private Button tryAgainButton;
+    [SerializeField] private Button nextButton;
 
     [Title("Scripts"), Space]
     [SerializeField] private UI_Camera uiCamera;
@@ -68,6 +70,8 @@ public class OnBoardingPopup : PopupBase
         base.OnRegisterEvents();
         startButton.onClick.AddListener(OnStartButtonClicked);
         readyButton.onClick.AddListener(OnReadyButtonClicked);
+        tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
+        nextButton.onClick.AddListener(OnNextButtonClicked);
     }
 
     protected override void OnUnRegisterEvents()
@@ -75,6 +79,8 @@ public class OnBoardingPopup : PopupBase
         base.OnUnRegisterEvents();
         startButton.onClick.RemoveListener(OnStartButtonClicked);
         readyButton.onClick.RemoveListener(OnReadyButtonClicked);
+        tryAgainButton.onClick.RemoveListener(OnTryAgainButtonClicked);
+        nextButton.onClick.RemoveListener(OnNextButtonClicked);
     }
 
     protected override void OnUpdate()
@@ -177,6 +183,8 @@ public class OnBoardingPopup : PopupBase
         startButton.gameObject.SetActiveIfNeeded(true);
         readyButton.gameObject.SetActiveIfNeeded(false);
         resultPanel.SetActiveIfNeeded(false);
+        tryAgainButton.gameObject.SetActiveIfNeeded(false);
+        nextButton.gameObject.SetActiveIfNeeded(false);
         predictedLetter.SetText("");
         confidenceText.SetText("");
         _stepIndex = 0;
@@ -289,7 +297,8 @@ public class OnBoardingPopup : PopupBase
     {
         cameraFrameObject.SetActiveIfNeeded(false);
         resultPanel.SetActiveIfNeeded(true);
-
+        tryAgainButton.gameObject.SetActiveIfNeeded(true);
+        nextButton.gameObject.SetActiveIfNeeded(true);
         var letterData = ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial];
         sampleImage.sprite = letterData.sprite;
         labelText.SetText(letterTypeTutorial.ToString());
@@ -330,5 +339,21 @@ public class OnBoardingPopup : PopupBase
         catch (Exception e)
         {
         }
+    }
+
+    private void OnTryAgainButtonClicked()
+    {
+        _stepIndex -= 2;
+        tryAgainButton.gameObject.SetActiveIfNeeded(false);
+        nextButton.gameObject.SetActiveIfNeeded(false);
+        cameraFrameObject.SetActiveIfNeeded(true);
+        resultPanel.SetActiveIfNeeded(false);
+        SetupUI();
+    }
+
+    private void OnNextButtonClicked()
+    {
+        tryAgainButton.gameObject.SetActiveIfNeeded(false);
+        nextButton.gameObject.SetActiveIfNeeded(false);
     }
 }
