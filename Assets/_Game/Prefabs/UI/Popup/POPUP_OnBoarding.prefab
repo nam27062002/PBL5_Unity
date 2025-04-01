@@ -461,15 +461,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Predict: A'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 98185ec82b9b9d2449801a5fa7213288, type: 2}
-  m_sharedMaterial: {fileID: 1835535772361725873, guid: 98185ec82b9b9d2449801a5fa7213288, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bec773117dd3ac84f908c4405177ec28, type: 2}
+  m_sharedMaterial: {fileID: 1835535772361725873, guid: bec773117dd3ac84f908c4405177ec28, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278255405
+  m_fontColor: {r: 0.17639518, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -486,8 +486,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -934,15 +934,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Confidence: 20.22%'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 98185ec82b9b9d2449801a5fa7213288, type: 2}
-  m_sharedMaterial: {fileID: 1835535772361725873, guid: 98185ec82b9b9d2449801a5fa7213288, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bec773117dd3ac84f908c4405177ec28, type: 2}
+  m_sharedMaterial: {fileID: 1835535772361725873, guid: bec773117dd3ac84f908c4405177ec28, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278255441
+  m_fontColor: {r: 0.3186469, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -959,8 +959,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1200,7 +1200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5000998552197785540
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1901,6 +1901,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - message: Great Job
+    onStart:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5877130011238835953}
+          m_TargetAssemblyTypeName: OnBoardingPopup, Assembly-CSharp
+          m_MethodName: ShowResult
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   loadingObject: {fileID: 3361083641017387143}
   loadingImage: {fileID: 1800465936845587289}
   loadingTime: 3
@@ -1908,6 +1924,13 @@ MonoBehaviour:
   predictedLetter: {fileID: 7368605229101567116}
   confidenceText: {fileID: 2569359756747571145}
   sendInterval: 0.1
+  cameraFrameObject: {fileID: 3638419451317175393}
+  resultPanel: {fileID: 1906186663410603215}
+  sampleImage: {fileID: 5579856196743472023}
+  labelText: {fileID: 454707612342643189}
+  predictionImage: {fileID: 3688407073478863353}
+  predictedText: {fileID: 6775882492543831608}
+  confidence2Text: {fileID: 4441918516651447028}
 --- !u!1 &8133351185428255744
 GameObject:
   m_ObjectHideFlags: 0

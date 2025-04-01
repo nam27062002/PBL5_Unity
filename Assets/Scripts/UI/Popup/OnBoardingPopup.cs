@@ -44,15 +44,16 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private float sendInterval = 0.1f;
 
     [Title("Final Step")]
+    [SerializeField] private GameObject cameraFrameObject;
     [SerializeField] private GameObject resultPanel;
-    
+
     [SerializeField] private Image sampleImage;
     [SerializeField] private TextMeshProUGUI labelText;
-    
+
     [SerializeField] private Image predictionImage;
     [SerializeField] private TextMeshProUGUI predictedText;
     [SerializeField] private TextMeshProUGUI confidence2Text;
-    
+
     private float _timer;
     private int _stepIndex;
     private float timeSinceLastSend = 0f;
@@ -175,6 +176,7 @@ public class OnBoardingPopup : PopupBase
         uiLetter.Hide();
         startButton.gameObject.SetActiveIfNeeded(true);
         readyButton.gameObject.SetActiveIfNeeded(false);
+        resultPanel.SetActiveIfNeeded(false);
         predictedLetter.SetText("");
         confidenceText.SetText("");
         _stepIndex = 0;
@@ -197,19 +199,20 @@ public class OnBoardingPopup : PopupBase
 
     public void HandleHandRecognition()
     {
-        TCPClient.Instance.OnStringReceived -= OnStringReceivedHandleHandRecognition;
-        TCPClient.Instance.OnStringReceived += OnStringReceivedHandleHandRecognition;
+        TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleHandRecognition;
+        TCPClient.Instance.OnDataReceived += OnStringReceivedHandleHandRecognition;
     }
 
-    private void OnStringReceivedHandleHandRecognition(KeyData _, string hasHandStr)
+    private void OnStringReceivedHandleHandRecognition(KeyData _, byte[] data)
     {
+        string hasHandStr = System.Text.Encoding.UTF8.GetString(data);
         _hasHand = Convert.ToBoolean(hasHandStr);
         loadingObject.SetActiveIfNeeded(_hasHand);
     }
 
     public void TryRememberSign()
     {
-        TCPClient.Instance.OnStringReceived -= OnStringReceivedHandleHandRecognition;
+        TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleHandRecognition;
         loadingObject.SetActiveIfNeeded(false);
         uiCamera.HideWebCam();
         uiLetter.Show();
@@ -229,12 +232,12 @@ public class OnBoardingPopup : PopupBase
 
     public void HandleLetterPrediction()
     {
-        TCPClient.Instance.OnStringReceived += OnStringReceivedHandleLetterPrediction;
+        TCPClient.Instance.OnDataReceived += OnStringReceivedHandleLetterPrediction;
     }
 
-    private void OnStringReceivedHandleLetterPrediction(KeyData _, string letterStr)
+    private void OnStringReceivedHandleLetterPrediction(KeyData _, byte[] data)
     {
-        Debug.Log("letterStr: " + letterStr);
+        string letterStr = System.Text.Encoding.UTF8.GetString(data);
         if (letterStr.StartsWith("Predicted: "))
         {
             string[] parts = letterStr.Split(',');
@@ -242,34 +245,30 @@ public class OnBoardingPopup : PopupBase
             string confidenceStr = parts[1].Replace("Confidence: ", "").Trim();
             float confidence = float.Parse(confidenceStr) * 100f;
 
-            // Xử lý predictedLetter
             bool isCorrect = letter == letterTypeTutorial.ToString();
             Color letterColor = isCorrect ? Color.green : Color.red;
             predictedLetter.SetText($"Predict: {letter}");
             predictedLetter.color = letterColor;
 
-            // Xử lý confidence
             Color confidenceColor = (!isCorrect || confidence < 70f) ? Color.red : Color.green;
             confidenceText.SetText($"Confidence: {confidence:F2}%");
             confidenceText.color = confidenceColor;
 
             if (isCorrect)
             {
-                // Lưu texture có độ chính xác cao nhất
                 if (confidence > _highestConfidence)
                 {
                     _highestConfidence = confidence;
                     _bestTexture = WebCamManager.Instance.ProcessingTexture.CloneTexture();
                 }
-                
+
                 _correctPredictionCount++;
                 if (_correctPredictionCount >= REQUIRED_CORRECT_PREDICTIONS)
                 {
-                    Debug.Log("Win với texture có độ chính xác: " + _highestConfidence);
-                    // Tại đây _bestTexture là texture có độ chính xác cao nhất
                     _correctPredictionCount = 0;
                     _stepIndex++;
-                    TCPClient.Instance.OnStringReceived -= OnStringReceivedHandleLetterPrediction;
+                    TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleLetterPrediction;
+                    SetupUI();
                 }
             }
             else
@@ -283,6 +282,53 @@ public class OnBoardingPopup : PopupBase
             predictedLetter.SetText("Cannot process image");
             predictedLetter.color = Color.red;
             confidenceText.SetText("");
+        }
+    }
+
+    public void ShowResult()
+    {
+        cameraFrameObject.SetActiveIfNeeded(false);
+        resultPanel.SetActiveIfNeeded(true);
+
+        var letterData = ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial];
+        sampleImage.sprite = letterData.sprite;
+        labelText.SetText(letterTypeTutorial.ToString());
+
+        if (_bestTexture != null)
+        {
+            predictionImage.sprite = Sprite.Create(_bestTexture, new Rect(0, 0, _bestTexture.width, _bestTexture.height), Vector2.one * 0.5f);
+
+            TCPClient.Instance.OnDataReceived += OnProcessedImageReceived;
+            TCPClient.Instance.SendData(KeyData.RawImageProcessing, _bestTexture);
+        }
+
+        predictedText.SetText($"Predict: {letterTypeTutorial.ToString()}");
+        predictedText.color = Color.green;
+        confidence2Text.SetText($"Confidence: {_highestConfidence:F2}%");
+        confidence2Text.color = Color.green;
+    }
+
+    private void OnProcessedImageReceived(KeyData keyData, byte[] imageBytes)
+    {
+        if (keyData != KeyData.RawImageProcessing) return;
+
+        try
+        {
+            Texture2D processedTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            bool isLoaded = processedTexture.LoadImage(imageBytes);
+
+            if (isLoaded && processedTexture.width > 2 && processedTexture.height > 2)
+            {
+                Sprite newSprite = Sprite.Create(
+                    processedTexture,
+                    new Rect(0, 0, processedTexture.width, processedTexture.height),
+                    new Vector2(0.5f, 0.5f)
+                );
+                predictionImage.sprite = newSprite;
+            }
+        }
+        catch (Exception e)
+        {
         }
     }
 }

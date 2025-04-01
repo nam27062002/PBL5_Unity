@@ -16,7 +16,7 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
     private NetworkStream _stream;
     private Thread _receiveThread;
     private bool _isRunning = true;
-    public event Action<KeyData, string> OnStringReceived;
+    public event Action<KeyData, byte[]> OnDataReceived;
 
     private void Start()
     {
@@ -149,13 +149,11 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
                     {
                         bytesRead += _stream.Read(payloadBuffer, bytesRead, payloadLength - bytesRead);
                     }
-                    var response = Encoding.ASCII.GetString(payloadBuffer);
 
                     UnityMainThreadDispatcher.Instance.Enqueue(() =>
                     {
-                        OnStringReceived?.Invoke(keyData, response);
+                        OnDataReceived?.Invoke(keyData, payloadBuffer); // Truyền byte trực tiếp
                     });
-                    // AlkawaDebug.Log(ELogCategory.TCP, $"ReceiveData -> Key = {keyData}, Data = {response}");
                 }
                 else
                 {
