@@ -59,6 +59,8 @@ public class OnBoardingPopup : PopupBase
     private bool _hasHand;
     private int _correctPredictionCount = 0;
     private const int REQUIRED_CORRECT_PREDICTIONS = 5;
+    private float _highestConfidence = 0f;
+    private Texture2D _bestTexture;
 
     protected override void OnRegisterEvents()
     {
@@ -125,11 +127,17 @@ public class OnBoardingPopup : PopupBase
     {
         if (_stepIndex == HAND_RECOGNITION_STEP)
         {
-            TCPClient.Instance.SendData(KeyData.HandRecognition, WebCamManager.Instance.ProcessingTexture);
+            TCPClient.Instance.SendData(
+                KeyData.HandRecognition,
+                WebCamManager.Instance.ProcessingTexture
+            );
         }
         else if (_stepIndex == LETTER_PREDICTION_STEP)
         {
-            TCPClient.Instance.SendData(KeyData.LetterPrediction, WebCamManager.Instance.ProcessingTexture);
+            TCPClient.Instance.SendData(
+                KeyData.LetterPrediction,
+                WebCamManager.Instance.ProcessingTexture
+            );
         }
     }
 
@@ -247,9 +255,18 @@ public class OnBoardingPopup : PopupBase
 
             if (isCorrect)
             {
+                // Lưu texture có độ chính xác cao nhất
+                if (confidence > _highestConfidence)
+                {
+                    _highestConfidence = confidence;
+                    _bestTexture = WebCamManager.Instance.ProcessingTexture.CloneTexture();
+                }
+                
                 _correctPredictionCount++;
                 if (_correctPredictionCount >= REQUIRED_CORRECT_PREDICTIONS)
                 {
+                    Debug.Log("Win với texture có độ chính xác: " + _highestConfidence);
+                    // Tại đây _bestTexture là texture có độ chính xác cao nhất
                     _correctPredictionCount = 0;
                     _stepIndex++;
                     TCPClient.Instance.OnStringReceived -= OnStringReceivedHandleLetterPrediction;
