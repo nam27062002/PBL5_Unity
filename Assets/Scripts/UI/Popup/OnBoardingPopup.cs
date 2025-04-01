@@ -43,6 +43,16 @@ public class OnBoardingPopup : PopupBase
     [Title("Optimization Settings")]
     [SerializeField] private float sendInterval = 0.1f;
 
+    [Title("Final Step")]
+    [SerializeField] private GameObject resultPanel;
+    
+    [SerializeField] private Image sampleImage;
+    [SerializeField] private TextMeshProUGUI labelText;
+    
+    [SerializeField] private Image predictionImage;
+    [SerializeField] private TextMeshProUGUI predictedText;
+    [SerializeField] private TextMeshProUGUI confidence2Text;
+    
     private float _timer;
     private int _stepIndex;
     private float timeSinceLastSend = 0f;
@@ -240,8 +250,9 @@ public class OnBoardingPopup : PopupBase
                 _correctPredictionCount++;
                 if (_correctPredictionCount >= REQUIRED_CORRECT_PREDICTIONS)
                 {
-                    Debug.Log("Win");
                     _correctPredictionCount = 0;
+                    _stepIndex++;
+                    TCPClient.Instance.OnStringReceived -= OnStringReceivedHandleLetterPrediction;
                 }
             }
             else

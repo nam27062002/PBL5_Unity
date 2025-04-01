@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: _Font
+  m_Name: _Font_Origin
   m_EditorClassIdentifier: 
   m_Version: 1.1.0
   m_FaceInfo:
@@ -134,6 +134,21 @@ MonoBehaviour:
       m_Y: 110
       m_Width: 16
       m_Height: 69
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+  - m_Index: 23
+    m_Metrics:
+      m_Width: 27.65625
+      m_Height: 27.546875
+      m_HorizontalBearingX: 8.0625
+      m_HorizontalBearingY: 68.640625
+      m_HorizontalAdvance: 43.78125
+    m_GlyphRect:
+      m_X: 745
+      m_Y: 6
+      m_Width: 28
+      m_Height: 28
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
@@ -782,21 +797,6 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
-  - m_Index: 23
-    m_Metrics:
-      m_Width: 27.65625
-      m_Height: 27.546875
-      m_HorizontalBearingX: 8.0625
-      m_HorizontalBearingY: 68.640625
-      m_HorizontalAdvance: 43.78125
-    m_GlyphRect:
-      m_X: 745
-      m_Y: 6
-      m_Width: 28
-      m_Height: 28
-    m_Scale: 1
-    m_AtlasIndex: 0
-    m_ClassDefinitionType: 0
   m_CharacterTable:
   - m_ElementType: 1
     m_Unicode: 32
@@ -805,6 +805,10 @@ MonoBehaviour:
   - m_ElementType: 1
     m_Unicode: 33
     m_GlyphIndex: 22
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 34
+    m_GlyphIndex: 23
     m_Scale: 1
   - m_ElementType: 1
     m_Unicode: 37
@@ -977,10 +981,6 @@ MonoBehaviour:
   - m_ElementType: 1
     m_Unicode: 8230
     m_GlyphIndex: 189
-    m_Scale: 1
-  - m_ElementType: 1
-    m_Unicode: 34
-    m_GlyphIndex: 23
     m_Scale: 1
   m_AtlasTextures:
   - {fileID: -2025792592280643511}
@@ -19527,7 +19527,7 @@ Material:
     - _ColorMask: 15
     - _CullMode: 0
     - _Diffuse: 0.5
-    - _FaceDilate: -0.14
+    - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
     - _GlowInner: 0.05
@@ -19545,8 +19545,8 @@ Material:
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
-    - _ScaleRatioB: 0.79375
-    - _ScaleRatioC: 0.79375
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
