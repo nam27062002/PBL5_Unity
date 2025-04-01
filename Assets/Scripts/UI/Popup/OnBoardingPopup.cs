@@ -25,6 +25,7 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private Button readyButton;
     [SerializeField] private Button tryAgainButton;
     [SerializeField] private Button nextButton;
+    [SerializeField] private Button backButton;
 
     [Title("Scripts"), Space]
     [SerializeField] private UI_Camera uiCamera;
@@ -348,6 +349,23 @@ public class OnBoardingPopup : PopupBase
         nextButton.gameObject.SetActiveIfNeeded(false);
         cameraFrameObject.SetActiveIfNeeded(true);
         resultPanel.SetActiveIfNeeded(false);
+
+        predictedLetter.SetText("");
+        confidenceText.SetText("");
+        message.SetText("");
+        labelText.SetText("");
+        predictedText.SetText("");
+        confidence2Text.SetText("");
+
+        _correctPredictionCount = 0;
+        _highestConfidence = 0f;
+        _bestTexture = null;
+
+        uiCamera.HideWebCam();
+        uiLetter.Show();
+        readyButton.gameObject.SetActiveIfNeeded(true);
+        uiLetter.SetLetter(letterTypeTutorial, ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial]);
+
         SetupUI();
     }
 
