@@ -8,9 +8,16 @@ using UnityEngine.UI;
 
 public class OnBoardingPopup : PopupBase
 {
+    #region Constants
+
     private const int HAND_RECOGNITION_STEP = 1;
     private const int LETTER_PREDICTION_STEP = 4;
     private const float EDITOR_LOADING_TIME = 0.5f;
+    private const int REQUIRED_CORRECT_PREDICTIONS = 5;
+
+    #endregion
+
+    #region Classes
 
     [Serializable]
     public class StepConfig
@@ -19,6 +26,10 @@ public class OnBoardingPopup : PopupBase
         public UnityEvent onStart;
     }
 
+    #endregion
+
+    #region SerializeFields
+
     [Title("OnBoarding Popup"), Space]
     [SerializeField] private Button startButton;
     [SerializeField] private Button skipButton;
@@ -26,7 +37,8 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private Button tryAgainButton;
     [SerializeField] private Button nextButton;
     [SerializeField] private Button backButton;
-
+    [SerializeField] private Button playButton;
+    
     [Title("Scripts"), Space]
     [SerializeField] private UI_Camera uiCamera;
     [SerializeField] private UI_Letter uiLetter;
@@ -49,6 +61,7 @@ public class OnBoardingPopup : PopupBase
     [Title("Final Step")]
     [SerializeField] private GameObject cameraFrameObject;
     [SerializeField] private GameObject resultPanel;
+    [SerializeField] private GameObject readyToPlayObject;
 
     [SerializeField] private Image sampleImage;
     [SerializeField] private TextMeshProUGUI labelText;
@@ -57,14 +70,21 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private TextMeshProUGUI predictedText;
     [SerializeField] private TextMeshProUGUI confidence2Text;
 
+    #endregion
+
+    #region Private Fields
+
     private float _timer;
     private int _stepIndex;
-    private float timeSinceLastSend = 0f;
+    private float _timeSinceLastSend = 0f;
     private bool _hasHand;
     private int _correctPredictionCount = 0;
-    private const int REQUIRED_CORRECT_PREDICTIONS = 5;
     private float _highestConfidence = 0f;
     private Texture2D _bestTexture;
+
+    #endregion
+
+    #region Lifecycle Methods
 
     protected override void OnRegisterEvents()
     {
@@ -73,6 +93,7 @@ public class OnBoardingPopup : PopupBase
         readyButton.onClick.AddListener(OnReadyButtonClicked);
         tryAgainButton.onClick.AddListener(OnTryAgainButtonClicked);
         nextButton.onClick.AddListener(OnNextButtonClicked);
+        playButton.onClick.AddListener(OnPlayButtonClicked);
     }
 
     protected override void OnUnRegisterEvents()
@@ -82,6 +103,7 @@ public class OnBoardingPopup : PopupBase
         readyButton.onClick.RemoveListener(OnReadyButtonClicked);
         tryAgainButton.onClick.RemoveListener(OnTryAgainButtonClicked);
         nextButton.onClick.RemoveListener(OnNextButtonClicked);
+        playButton.onClick.RemoveListener(OnPlayButtonClicked);
     }
 
     protected override void OnUpdate()
@@ -89,6 +111,47 @@ public class OnBoardingPopup : PopupBase
         base.OnUpdate();
         HandleStepUpdate();
     }
+
+    public override void Open(IBaseEventParamsUI baseEventParamsUI)
+    {
+        base.Open(baseEventParamsUI);
+        InitializeUI();
+        SetupUI();
+#if UNITY_EDITOR
+        loadingTime = EDITOR_LOADING_TIME;
+#endif
+    }
+
+    #endregion
+
+    #region Initialization
+
+    private void InitializeUI()
+    {
+        loadingObject.SetActiveIfNeeded(false);
+        uiCamera.ShowWebCam();
+        uiLetter.Hide();
+        startButton.gameObject.SetActiveIfNeeded(true);
+        readyButton.gameObject.SetActiveIfNeeded(false);
+        resultPanel.SetActiveIfNeeded(false);
+        tryAgainButton.gameObject.SetActiveIfNeeded(false);
+        nextButton.gameObject.SetActiveIfNeeded(false);
+        predictedLetter.SetText("");
+        confidenceText.SetText("");
+        _stepIndex = 0;
+    }
+
+    private void SetupUI()
+    {
+        if (_stepIndex >= stepConfigs.Count) return;
+        var stepConfig = stepConfigs[_stepIndex];
+        message.SetText(stepConfig.message);
+        stepConfig.onStart?.Invoke();
+    }
+
+    #endregion
+
+    #region Step Handling
 
     private void HandleStepUpdate()
     {
@@ -121,12 +184,16 @@ public class OnBoardingPopup : PopupBase
         UpdateSendInterval();
     }
 
+    #endregion
+
+    #region TCP Communication
+
     private void UpdateSendInterval()
     {
-        timeSinceLastSend += Time.unscaledDeltaTime;
-        if (timeSinceLastSend >= sendInterval)
+        _timeSinceLastSend += Time.unscaledDeltaTime;
+        if (_timeSinceLastSend >= sendInterval)
         {
-            timeSinceLastSend = 0f;
+            _timeSinceLastSend = 0f;
             SendData();
         }
     }
@@ -149,63 +216,6 @@ public class OnBoardingPopup : PopupBase
         }
     }
 
-    private void UpdateLoadingTimer()
-    {
-        _timer += Time.unscaledDeltaTime;
-        loadingImage.fillAmount = _timer / loadingTime;
-        if (_timer >= loadingTime)
-        {
-            _stepIndex++;
-            SetupUI();
-        }
-    }
-
-    private void ResetLoadingTimer()
-    {
-        _timer = 0;
-        loadingImage.fillAmount = 0;
-    }
-
-    public override void Open(IBaseEventParamsUI baseEventParamsUI)
-    {
-        base.Open(baseEventParamsUI);
-        InitializeUI();
-        SetupUI();
-#if UNITY_EDITOR
-        loadingTime = EDITOR_LOADING_TIME;
-#endif
-    }
-
-    private void InitializeUI()
-    {
-        loadingObject.SetActiveIfNeeded(false);
-        uiCamera.ShowWebCam();
-        uiLetter.Hide();
-        startButton.gameObject.SetActiveIfNeeded(true);
-        readyButton.gameObject.SetActiveIfNeeded(false);
-        resultPanel.SetActiveIfNeeded(false);
-        tryAgainButton.gameObject.SetActiveIfNeeded(false);
-        nextButton.gameObject.SetActiveIfNeeded(false);
-        predictedLetter.SetText("");
-        confidenceText.SetText("");
-        _stepIndex = 0;
-    }
-
-    private void OnStartButtonClicked()
-    {
-        startButton.gameObject.SetActiveIfNeeded(false);
-        _stepIndex++;
-        SetupUI();
-    }
-
-    private void SetupUI()
-    {
-        if (_stepIndex >= stepConfigs.Count) return;
-        var stepConfig = stepConfigs[_stepIndex];
-        message.SetText(stepConfig.message);
-        stepConfig.onStart?.Invoke();
-    }
-
     public void HandleHandRecognition()
     {
         TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleHandRecognition;
@@ -217,26 +227,6 @@ public class OnBoardingPopup : PopupBase
         string hasHandStr = System.Text.Encoding.UTF8.GetString(data);
         _hasHand = Convert.ToBoolean(hasHandStr);
         loadingObject.SetActiveIfNeeded(_hasHand);
-    }
-
-    public void TryRememberSign()
-    {
-        TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleHandRecognition;
-        loadingObject.SetActiveIfNeeded(false);
-        uiCamera.HideWebCam();
-        uiLetter.Show();
-        readyButton.gameObject.SetActiveIfNeeded(true);
-        uiLetter.SetLetter(letterTypeTutorial, ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial]);
-    }
-
-    private void OnReadyButtonClicked()
-    {
-        _stepIndex++;
-        SetupUI();
-        readyButton.gameObject.SetActiveIfNeeded(false);
-        uiLetter.Hide();
-        uiCamera.ShowWebCam();
-        startButton.gameObject.SetActiveIfNeeded(true);
     }
 
     public void HandleLetterPrediction()
@@ -294,6 +284,174 @@ public class OnBoardingPopup : PopupBase
         }
     }
 
+    private void OnProcessedImageReceived(KeyData keyData, byte[] imageBytes)
+    {
+        if (keyData != KeyData.RawImageProcessing) return;
+
+        try
+        {
+            Texture2D processedTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            bool isLoaded = processedTexture.LoadImage(imageBytes);
+
+            if (isLoaded && processedTexture.width > 2 && processedTexture.height > 2)
+            {
+                Sprite newSprite = Sprite.Create(
+                    processedTexture,
+                    new Rect(0, 0, processedTexture.width, processedTexture.height),
+                    new Vector2(0.5f, 0.5f)
+                );
+                predictionImage.sprite = newSprite;
+            }
+        }
+        catch (Exception e)
+        {
+            // Xử lý lỗi nếu cần
+        }
+    }
+
+    #endregion
+
+    #region UI Utilities
+
+    private void UpdateLoadingTimer()
+    {
+        _timer += Time.unscaledDeltaTime;
+        loadingImage.fillAmount = _timer / loadingTime;
+        if (_timer >= loadingTime)
+        {
+            _stepIndex++;
+            SetupUI();
+        }
+    }
+
+    private void ResetLoadingTimer()
+    {
+        _timer = 0;
+        loadingImage.fillAmount = 0;
+    }
+
+    private void ClearAllText()
+    {
+        if (message != null)
+            message.SetText("");
+            
+        if (predictedLetter != null)
+            predictedLetter.SetText("");
+            
+        if (confidenceText != null)
+            confidenceText.SetText("");
+            
+        if (labelText != null)
+            labelText.SetText("");
+            
+        if (predictedText != null)
+            predictedText.SetText("");
+            
+        if (confidence2Text != null)
+            confidence2Text.SetText("");
+        
+        _highestConfidence = 0f;
+        _correctPredictionCount = 0;
+    }
+
+    private void HideAllObjects()
+    {
+        if (startButton != null)
+            startButton.gameObject.SetActiveIfNeeded(false);
+            
+        if (loadingObject != null)
+            loadingObject.SetActiveIfNeeded(false);
+            
+        if (uiCamera != null)
+            uiCamera.HideWebCam();
+            
+        if (uiLetter != null)
+            uiLetter.Hide();
+            
+        if (resultPanel != null)
+            resultPanel.SetActiveIfNeeded(false);
+            
+        if (readyButton != null)
+            readyButton.gameObject.SetActiveIfNeeded(false);
+            
+        if (tryAgainButton != null)
+            tryAgainButton.gameObject.SetActiveIfNeeded(false);
+            
+        if (nextButton != null)
+            nextButton.gameObject.SetActiveIfNeeded(false);
+    }
+
+    #endregion
+
+    #region Button Event Handlers
+
+    private void OnStartButtonClicked()
+    {
+        startButton.gameObject.SetActiveIfNeeded(false);
+        _stepIndex++;
+        SetupUI();
+    }
+
+    private void OnReadyButtonClicked()
+    {
+        _stepIndex++;
+        SetupUI();
+        readyButton.gameObject.SetActiveIfNeeded(false);
+        uiLetter.Hide();
+        uiCamera.ShowWebCam();
+        startButton.gameObject.SetActiveIfNeeded(true);
+    }
+
+    private void OnTryAgainButtonClicked()
+    {
+        _stepIndex -= 2;
+        tryAgainButton.gameObject.SetActiveIfNeeded(false);
+        nextButton.gameObject.SetActiveIfNeeded(false);
+        cameraFrameObject.SetActiveIfNeeded(true);
+        resultPanel.SetActiveIfNeeded(false);
+
+        ClearAllText();
+
+        _bestTexture = null;
+
+        uiCamera.HideWebCam();
+        uiLetter.Show();
+        readyButton.gameObject.SetActiveIfNeeded(true);
+        uiLetter.SetLetter(letterTypeTutorial, ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial]);
+
+        SetupUI();
+    }
+
+    private void OnNextButtonClicked()
+    {
+        tryAgainButton.gameObject.SetActiveIfNeeded(false);
+        nextButton.gameObject.SetActiveIfNeeded(false);
+        cameraFrameObject.SetActiveIfNeeded(false);
+        resultPanel.SetActiveIfNeeded(false);
+        readyToPlayObject.SetActiveIfNeeded(true);
+        message.SetText("");
+    }
+
+    private void OnPlayButtonClicked()
+    {
+        LoadSaveManager.Instance.OnBoardingFinished = true;
+        ClosePopup();
+    }
+
+    #endregion
+
+    #region Step Actions
+
+    public void TryRememberSign()
+    {
+        TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleHandRecognition;
+        loadingObject.SetActiveIfNeeded(false);
+        uiCamera.HideWebCam();
+        uiLetter.Show();
+        readyButton.gameObject.SetActiveIfNeeded(true);
+        uiLetter.SetLetter(letterTypeTutorial, ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial]);
+    }
+
     public void ShowResult()
     {
         cameraFrameObject.SetActiveIfNeeded(false);
@@ -318,60 +476,5 @@ public class OnBoardingPopup : PopupBase
         confidence2Text.color = Color.green;
     }
 
-    private void OnProcessedImageReceived(KeyData keyData, byte[] imageBytes)
-    {
-        if (keyData != KeyData.RawImageProcessing) return;
-
-        try
-        {
-            Texture2D processedTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-            bool isLoaded = processedTexture.LoadImage(imageBytes);
-
-            if (isLoaded && processedTexture.width > 2 && processedTexture.height > 2)
-            {
-                Sprite newSprite = Sprite.Create(
-                    processedTexture,
-                    new Rect(0, 0, processedTexture.width, processedTexture.height),
-                    new Vector2(0.5f, 0.5f)
-                );
-                predictionImage.sprite = newSprite;
-            }
-        }
-        catch (Exception e)
-        {
-        }
-    }
-
-    private void OnTryAgainButtonClicked()
-    {
-        _stepIndex -= 2;
-        tryAgainButton.gameObject.SetActiveIfNeeded(false);
-        nextButton.gameObject.SetActiveIfNeeded(false);
-        cameraFrameObject.SetActiveIfNeeded(true);
-        resultPanel.SetActiveIfNeeded(false);
-
-        predictedLetter.SetText("");
-        confidenceText.SetText("");
-        message.SetText("");
-        labelText.SetText("");
-        predictedText.SetText("");
-        confidence2Text.SetText("");
-
-        _correctPredictionCount = 0;
-        _highestConfidence = 0f;
-        _bestTexture = null;
-
-        uiCamera.HideWebCam();
-        uiLetter.Show();
-        readyButton.gameObject.SetActiveIfNeeded(true);
-        uiLetter.SetLetter(letterTypeTutorial, ScriptableObjectManager.Instance.lettersConfig.Letters[letterTypeTutorial]);
-
-        SetupUI();
-    }
-
-    private void OnNextButtonClicked()
-    {
-        tryAgainButton.gameObject.SetActiveIfNeeded(false);
-        nextButton.gameObject.SetActiveIfNeeded(false);
-    }
+    #endregion
 }

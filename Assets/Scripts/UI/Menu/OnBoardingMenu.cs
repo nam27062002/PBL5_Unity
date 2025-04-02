@@ -21,19 +21,26 @@ public class OnBoardingMenu : MenuBase
 
     private void OnStartButtonClicked()
     {
-        if (!LoadSaveManager.Instance.AllowUseCamera)
+        if (LoadSaveManager.Instance.OnBoardingFinished)
         {
-            UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.allowUseCameraPopup);
+            UIManager.OpenMenu(MenuType.Game, null);
         }
         else
         {
-            if (WebCamManager.HasWebCamDevice)
+            if (!LoadSaveManager.Instance.AllowUseCamera)
             {
-                UIManager.OpenPopup(PopupType.OnBoarding, null);
+                UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.allowUseCameraPopup);
             }
             else
             {
-                UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.cameraNotDetectedPopup);   
+                if (WebCamManager.HasWebCamDevice)
+                {
+                    UIManager.OpenPopup(PopupType.OnBoarding, null);
+                }
+                else
+                {
+                    UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.cameraNotDetectedPopup);   
+                }
             }
         }
     }
