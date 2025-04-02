@@ -7,6 +7,7 @@ public abstract class UIBase : MonoBehaviour
     protected virtual string OnOpenMessage => "UIBase: Opened";
     protected virtual string OnCloseMessage => "UIBase: Closed";
     protected UIManager UIManager => UIManager.Instance;
+    protected bool IsActive => gameObject.activeSelf;
     protected virtual void Awake()
     {
         Initialization();
@@ -15,27 +16,27 @@ public abstract class UIBase : MonoBehaviour
 
     protected virtual void Initialization()
     {
-        
+
     }
 
     protected virtual void OnDestroy()
     {
-        OnUnRegisterEvents();        
+        OnUnRegisterEvents();
     }
 
     protected void Update()
     {
-        OnUpdate();
+        if (IsActive) OnUpdate();
     }
 
     protected virtual void OnUpdate()
     {
-        
+
     }
-    
+
     public virtual void Open(IBaseEventParamsUI baseEventParamsUI)
     {
-        gameObject.SetActiveIfNeeded(true);   
+        gameObject.SetActiveIfNeeded(true);
         AlkawaDebug.Log(ELogCategory.UI, OnOpenMessage);
     }
 
@@ -44,7 +45,7 @@ public abstract class UIBase : MonoBehaviour
         gameObject.SetActive(false);
         AlkawaDebug.Log(ELogCategory.UI, OnCloseMessage);
     }
-    
-    protected virtual void OnRegisterEvents(){}
-    protected virtual void OnUnRegisterEvents(){}
+
+    protected virtual void OnRegisterEvents() { }
+    protected virtual void OnUnRegisterEvents() { }
 }

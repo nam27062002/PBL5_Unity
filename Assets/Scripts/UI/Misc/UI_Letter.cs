@@ -12,10 +12,12 @@ public class UI_Letter : MonoBehaviour
     private const string NULL_DICT_ERROR = "Letters dictionary is null";
     private const string LETTER_NOT_FOUND_WARNING = "Letter type {0} not found in config";
 
-    [SerializeField] private Image letterImage;
-    [SerializeField] private TextMeshProUGUI letterText;
-    [SerializeField] private LetterType letterType;
-    [SerializeField] private LettersConfig lettersConfig;
+    public Image letterImage;
+    public TextMeshProUGUI letterText;
+    public TextMeshProUGUI confidenceText;
+    public GameObject unknownObject;
+    public LetterType letterType;
+    public LettersConfig lettersConfig;
 
     public void SetLetter(LetterType letterType, Letter letter)
     {
@@ -66,14 +68,14 @@ public class UI_Letter : MonoBehaviour
 
     private void OnValidate()
     {
-        if (!ValidateConfig()) return;
-        if (!ValidateLetterType()) return;
+        // if (!ValidateConfig()) return;
+        // if (!ValidateLetterType()) return;
 
-        var letter = lettersConfig.Letters[letterType];
-        if (letter != null)
-        {
-            SetLetter(letterType, letter);
-        }
+        // var letter = lettersConfig.Letters[letterType];
+        // if (letter != null)
+        // {
+        //     SetLetter(letterType, letter);
+        // }
     }
 
     private bool ValidateConfig()

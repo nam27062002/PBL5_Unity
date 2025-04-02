@@ -38,7 +38,7 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private Button nextButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Button playButton;
-    
+
     [Title("Scripts"), Space]
     [SerializeField] private UI_Camera uiCamera;
     [SerializeField] private UI_Letter uiLetter;
@@ -249,7 +249,7 @@ public class OnBoardingPopup : PopupBase
             predictedLetter.SetText($"Predict: {letter}");
             predictedLetter.color = letterColor;
 
-            Color confidenceColor = (!isCorrect || confidence < 70f) ? Color.red : Color.green;
+            Color confidenceColor = confidence >= 80f ? Color.green : Color.red;
             confidenceText.SetText($"Confidence: {confidence:F2}%");
             confidenceText.color = confidenceColor;
 
@@ -278,7 +278,7 @@ public class OnBoardingPopup : PopupBase
         else
         {
             _correctPredictionCount = 0;
-            predictedLetter.SetText("Cannot process image");
+            predictedLetter.SetText("Unknown");
             predictedLetter.color = Color.red;
             confidenceText.SetText("");
         }
@@ -334,22 +334,22 @@ public class OnBoardingPopup : PopupBase
     {
         if (message != null)
             message.SetText("");
-            
+
         if (predictedLetter != null)
             predictedLetter.SetText("");
-            
+
         if (confidenceText != null)
             confidenceText.SetText("");
-            
+
         if (labelText != null)
             labelText.SetText("");
-            
+
         if (predictedText != null)
             predictedText.SetText("");
-            
+
         if (confidence2Text != null)
             confidence2Text.SetText("");
-        
+
         _highestConfidence = 0f;
         _correctPredictionCount = 0;
     }
@@ -358,25 +358,25 @@ public class OnBoardingPopup : PopupBase
     {
         if (startButton != null)
             startButton.gameObject.SetActiveIfNeeded(false);
-            
+
         if (loadingObject != null)
             loadingObject.SetActiveIfNeeded(false);
-            
+
         if (uiCamera != null)
             uiCamera.HideWebCam();
-            
+
         if (uiLetter != null)
             uiLetter.Hide();
-            
+
         if (resultPanel != null)
             resultPanel.SetActiveIfNeeded(false);
-            
+
         if (readyButton != null)
             readyButton.gameObject.SetActiveIfNeeded(false);
-            
+
         if (tryAgainButton != null)
             tryAgainButton.gameObject.SetActiveIfNeeded(false);
-            
+
         if (nextButton != null)
             nextButton.gameObject.SetActiveIfNeeded(false);
     }
