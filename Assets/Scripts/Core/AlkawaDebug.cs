@@ -17,6 +17,7 @@ public enum ELogCategory
     ENGINE,
     AUDIO,
     GAMEPLAY,
+    EDITOR,
 }
 
 public enum ELogSeverity
@@ -156,6 +157,10 @@ public class AlkawaDebug
 
     private static bool IsCategoryDisabled(ELogCategory cat)
     {
+#if !UNITY_EDITOR
+        if (cat == ELogCategory.EDITOR)
+            return true;
+#endif
         return DisabledCategories.Contains(cat);
     }
 }

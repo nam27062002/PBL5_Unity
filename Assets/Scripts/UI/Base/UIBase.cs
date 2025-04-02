@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public abstract class UIBase : MonoBehaviour
 {
@@ -8,7 +9,13 @@ public abstract class UIBase : MonoBehaviour
     protected UIManager UIManager => UIManager.Instance;
     protected virtual void Awake()
     {
+        Initialization();
         OnRegisterEvents();
+    }
+
+    protected virtual void Initialization()
+    {
+        
     }
 
     protected virtual void OnDestroy()

@@ -12,8 +12,8 @@ public abstract class PopupBase : UIBase
     protected virtual bool HasShowGreyBackground => true;
     protected virtual bool HasPauseGame => true;
     
-    protected override string OnOpenMessage => $"{popupType}: OnOpen";
-    protected override string OnCloseMessage => $"{popupType}: OnClose";
+    protected override string OnOpenMessage => $"POPUP.{popupType}: OnOpen";
+    protected override string OnCloseMessage => $"POPUP.{popupType}: OnClose";
 
     protected override void OnRegisterEvents()
     {
