@@ -305,7 +305,7 @@ public class OnBoardingPopup : PopupBase
         }
         catch (Exception e)
         {
-            // Xử lý lỗi nếu cần
+            Debug.LogError($"Error processing image: {e.Message}");
         }
     }
 
