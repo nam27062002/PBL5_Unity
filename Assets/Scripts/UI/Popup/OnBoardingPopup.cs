@@ -436,6 +436,7 @@ public class OnBoardingPopup : PopupBase
     {
         LoadSaveManager.Instance.OnBoardingFinished = true;
         ClosePopup();
+        UIManager.Instance.OpenMenu(MenuType.Game, null);
     }
 
     #endregion
