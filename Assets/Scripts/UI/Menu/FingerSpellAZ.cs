@@ -16,7 +16,8 @@ public class FingerSpellAZ : MenuBase
     [SerializeField] private LetterType currentLetterType;
 
     [SerializeField] private LettersConfig lettersConfig;
-
+    [SerializeField] private float sendInterval = 0.1f;
+    private float _timeSinceLastSend = 0f;
     public override void Open(IBaseEventParamsUI baseEventParamsUI)
     {
         base.Open(baseEventParamsUI);
@@ -68,6 +69,26 @@ public class FingerSpellAZ : MenuBase
     {
         letter.SetLetter(currentLetterType, lettersConfig.Letters[currentLetterType]);
         TCPClient.Instance.OnDataReceived += OnStringReceivedHandleLetterPrediction;
+    }
+
+    protected override void OnUpdate()
+    {
+        UpdateSendInterval();
+    }
+
+    private void UpdateSendInterval()
+    {
+        _timeSinceLastSend += Time.unscaledDeltaTime;
+        if (_timeSinceLastSend >= sendInterval)
+        {
+            _timeSinceLastSend = 0f;
+            SendData();
+        }
+    }
+
+    private void SendData()
+    {
+        TCPClient.Instance.SendData(KeyData.LetterPrediction, WebCamManager.Instance.ProcessingTexture);
     }
 
     private void OnStringReceivedHandleLetterPrediction(KeyData _, byte[] data)
