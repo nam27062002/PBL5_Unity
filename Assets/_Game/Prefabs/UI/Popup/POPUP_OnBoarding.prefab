@@ -288,6 +288,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letterImage: {fileID: 1620619966464088610}
   letterText: {fileID: 0}
+  confidenceText: {fileID: 0}
+  unknownObject: {fileID: 0}
   letterType: 2
   lettersConfig: {fileID: 11400000, guid: 103495fb10c1e8b41a423b828dd1f00d, type: 2}
 --- !u!1 &1906186663410603215
@@ -781,6 +783,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letterImage: {fileID: 276552940959431608}
   letterText: {fileID: 0}
+  confidenceText: {fileID: 0}
+  unknownObject: {fileID: 0}
   letterType: 2
   lettersConfig: {fileID: 11400000, guid: 103495fb10c1e8b41a423b828dd1f00d, type: 2}
 --- !u!1 &2980059706982738082

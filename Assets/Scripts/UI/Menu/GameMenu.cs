@@ -22,6 +22,7 @@ public class GameMenu : MenuBase
     private void OnFingerSpellAZButtonClicked()
     {
         Debug.Log("OnFingerSpellAZButtonClicked");
+        UIManager.Instance.OpenMenu(MenuType.FingerSpellAZ, null);
     }
 
     private void OnDetectFingerButtonClicked()

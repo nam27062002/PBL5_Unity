@@ -4,4 +4,5 @@
     OnBoarding = 1,
     Game = 2,
     DetectFinger = 3,
+    FingerSpellAZ = 4,
 }
