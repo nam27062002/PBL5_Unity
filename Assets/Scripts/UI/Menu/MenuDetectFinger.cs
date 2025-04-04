@@ -19,8 +19,7 @@ public class MenuDetectFinger : MenuBase
     protected override void OnUnRegisterEvents()
     {
         backButton.onClick.RemoveListener(OnBackButtonClicked);
-        if (TCPClient.HasInstance)
-            TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleLetterPrediction;
+        TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleLetterPrediction;
     }
 
     private void OnBackButtonClicked()
