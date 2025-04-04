@@ -18,6 +18,12 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
     private bool _isRunning = true;
     public event Action<KeyData, byte[]> OnDataReceived;
 
+    // Phương thức để kiểm tra xem có thành phần nào đăng ký để nhận dữ liệu không
+    public bool HasReceiverRegistered()
+    {
+        return OnDataReceived != null;
+    }
+
     private void Start()
     {
         ConnectToServer();

@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 public class FingerSpellAZ : MenuBase
 {
@@ -17,10 +18,16 @@ public class FingerSpellAZ : MenuBase
 
     [SerializeField] private LettersConfig lettersConfig;
     [SerializeField] private float sendInterval = 0.1f;
+    [SerializeField] private GameObject correctGameObject;
     private float _timeSinceLastSend = 0f;
+    private int _correctPredictionCount = 0;
+    private const int REQUIRED_CORRECT_PREDICTIONS = 5;
+
     public override void Open(IBaseEventParamsUI baseEventParamsUI)
     {
         base.Open(baseEventParamsUI);
+        _correctPredictionCount = 0;
+        SetupUI();
     }
 
     protected override void OnRegisterEvents()
@@ -67,6 +74,7 @@ public class FingerSpellAZ : MenuBase
     [Button("Setup UI")]
     private void SetupUI()
     {
+        correctGameObject.SetActiveIfNeeded(false);
         letter.SetLetter(currentLetterType, lettersConfig.Letters[currentLetterType]);
         TCPClient.Instance.OnDataReceived += OnStringReceivedHandleLetterPrediction;
     }
@@ -88,7 +96,10 @@ public class FingerSpellAZ : MenuBase
 
     private void SendData()
     {
-        TCPClient.Instance.SendData(KeyData.LetterPrediction, WebCamManager.Instance.ProcessingTexture);
+        if (TCPClient.Instance.HasReceiverRegistered())
+        {
+            TCPClient.Instance.SendData(KeyData.LetterPrediction, WebCamManager.Instance.ProcessingTexture);
+        }
     }
 
     private void OnStringReceivedHandleLetterPrediction(KeyData _, byte[] data)
@@ -101,25 +112,51 @@ public class FingerSpellAZ : MenuBase
             string confidenceStr = parts[1].Replace("Confidence: ", "").Trim();
             float confidence = float.Parse(confidenceStr) * 100f;
             var letterType = (LetterType)Enum.Parse(typeof(LetterType), letterPredicted);
-            if (letterType == currentLetterType)
-            {
-                Debug.Log("OKE NE");
-            }
-            letter.letterText.SetText($"Letter Signed: {letterPredicted}");
+            
+            bool isCorrect = letterType == currentLetterType;
+            
+            letter.predictedText.SetText($"Letter Signed: {letterPredicted}");
+            letter.predictedText.color = isCorrect ? Color.green : Color.red;
+            
             letter.confidenceText.SetText($"Confidence: {confidence:F2}%");
-            letter.confidenceText.color = confidence >= 80f ? Color.green : Color.red;
-            letter.letterImage.enabled = true;
-            letter.letterImage.sprite = ScriptableObjectManager.Instance.lettersConfig.Letters[letterType].sprite;
+            letter.confidenceText.color = (isCorrect && confidence > 80f) ? Color.green : Color.red;
+
+            if (isCorrect && confidence > 80f)
+            {
+                _correctPredictionCount++;
+                if (_correctPredictionCount >= REQUIRED_CORRECT_PREDICTIONS)
+                {
+                    HandleCorrectLetter();
+                    _correctPredictionCount = 0;
+                }
+            }
+            else
+            {
+                _correctPredictionCount = 0;
+            }
         }
         else
         {
-            letter.letterImage.enabled = false;
-            letter.letterText.SetText("Unknown");
+            letter.predictedText.SetText("Unknown");
+            letter.predictedText.color = Color.red;
             letter.confidenceText.SetText("");
+            _correctPredictionCount = 0;
         }
     }
 
-    
+    private void HandleCorrectLetter()
+    {
+        TCPClient.Instance.OnDataReceived -= OnStringReceivedHandleLetterPrediction;
+        correctGameObject.SetActiveIfNeeded(true);
+        StartCoroutine(ShowCorrectAndNext());
+    }
+
+    private System.Collections.IEnumerator ShowCorrectAndNext()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        correctGameObject.SetActiveIfNeeded(false);
+        OnNextButtonClicked();
+    }
 
     [Button("Set Letters Type")]
     private void SetLettersType()

@@ -289,9 +289,11 @@ MonoBehaviour:
   letterImage: {fileID: 1620619966464088610}
   letterText: {fileID: 0}
   confidenceText: {fileID: 0}
+  predictedText: {fileID: 0}
   unknownObject: {fileID: 0}
   letterType: 2
   lettersConfig: {fileID: 11400000, guid: 103495fb10c1e8b41a423b828dd1f00d, type: 2}
+  showLowerCase: 0
 --- !u!1 &1906186663410603215
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,9 +786,11 @@ MonoBehaviour:
   letterImage: {fileID: 276552940959431608}
   letterText: {fileID: 0}
   confidenceText: {fileID: 0}
+  predictedText: {fileID: 0}
   unknownObject: {fileID: 0}
   letterType: 2
   lettersConfig: {fileID: 11400000, guid: 103495fb10c1e8b41a423b828dd1f00d, type: 2}
+  showLowerCase: 0
 --- !u!1 &2980059706982738082
 GameObject:
   m_ObjectHideFlags: 0
