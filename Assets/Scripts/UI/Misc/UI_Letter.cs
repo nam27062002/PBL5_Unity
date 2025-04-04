@@ -15,9 +15,11 @@ public class UI_Letter : MonoBehaviour
     public Image letterImage;
     public TextMeshProUGUI letterText;
     public TextMeshProUGUI confidenceText;
+    public TextMeshProUGUI predictedText;
     public GameObject unknownObject;
     public LetterType letterType;
     public LettersConfig lettersConfig;
+    public bool showLowerCase = false;
 
     public void SetLetter(LetterType letterType, Letter letter)
     {
@@ -60,7 +62,17 @@ public class UI_Letter : MonoBehaviour
     private void UpdateLetterUI(LetterType letterType, Letter letter)
     {
         letterImage.sprite = letter.sprite;
-        letterText.text = letterType.ToString();
+        
+        if (showLowerCase)
+        {
+            string upperCase = letterType.ToString();
+            string lowerCase = upperCase.ToLower();
+            letterText.text = upperCase + lowerCase;
+        }
+        else
+        {
+            letterText.text = letterType.ToString();
+        }
     }
 
     public void Show() => gameObject.SetActiveIfNeeded(true);

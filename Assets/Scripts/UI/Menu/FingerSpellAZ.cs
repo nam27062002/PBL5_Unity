@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class FingerSpellAZ : MenuBase
 {
@@ -66,7 +67,37 @@ public class FingerSpellAZ : MenuBase
     private void SetupUI()
     {
         letter.SetLetter(currentLetterType, lettersConfig.Letters[currentLetterType]);
+        TCPClient.Instance.OnDataReceived += OnStringReceivedHandleLetterPrediction;
     }
+
+    private void OnStringReceivedHandleLetterPrediction(KeyData _, byte[] data)
+    {
+        string letterStr = System.Text.Encoding.UTF8.GetString(data);
+        if (letterStr.StartsWith("Predicted: "))
+        {
+            string[] parts = letterStr.Split(',');
+            string letterPredicted = parts[0].Replace("Predicted: ", "").Trim();
+            string confidenceStr = parts[1].Replace("Confidence: ", "").Trim();
+            float confidence = float.Parse(confidenceStr) * 100f;
+            var letterType = (LetterType)Enum.Parse(typeof(LetterType), letterPredicted);
+            if (letterType == currentLetterType)
+            {
+                Debug.Log("OKE NE");
+            }
+            letter.letterText.SetText($"Letter Signed: {letterPredicted}");
+            letter.confidenceText.SetText($"Confidence: {confidence:F2}%");
+            letter.confidenceText.color = confidence >= 80f ? Color.green : Color.red;
+            letter.letterImage.enabled = true;
+            letter.letterImage.sprite = ScriptableObjectManager.Instance.lettersConfig.Letters[letterType].sprite;
+        }
+        else
+        {
+            letter.letterImage.enabled = false;
+            letter.letterText.SetText("Unknown");
+            letter.confidenceText.SetText("");
+        }
+    }
+
     
 
     [Button("Set Letters Type")]
