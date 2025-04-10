@@ -5,4 +5,5 @@
     Game = 2,
     DetectFinger = 3,
     FingerSpellAZ = 4,
+    Loading = 5,
 }

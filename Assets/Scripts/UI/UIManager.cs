@@ -36,9 +36,34 @@ public class UIManager : SingletonMonoBehavior<UIManager>
 
     public void OpenMenu(MenuType menuType, IBaseEventParamsUI baseEventParamsUI)
     {
-        _currentMenu?.Close();
-        _currentMenu = allMenus[menuType];
-        _currentMenu.Open(baseEventParamsUI);
+        if (_currentMenu != null)
+        {
+            _currentMenu.Close();
+
+            // Lưu menu cần mở sau khi loading xong
+            MenuType targetMenuType = menuType;
+            IBaseEventParamsUI targetParams = baseEventParamsUI;
+
+            // Tạo tham số cho loading menu
+            var loadingParams = new LoadingMenuEventParams { loadingTime = 1f };
+
+            // Đăng ký callback khi load xong
+            GameManager.Instance.OnLoadComplete = () =>
+            {
+                // Mở menu đích sau khi loading hoàn tất
+                _currentMenu = allMenus[targetMenuType];
+                _currentMenu.Open(targetParams);
+            };
+
+            // Mở loading menu
+            _currentMenu = allMenus[MenuType.Loading];
+            _currentMenu.Open(loadingParams);
+        }
+        else
+        {
+            _currentMenu = allMenus[menuType];
+            _currentMenu.Open(baseEventParamsUI);
+        }
     }
 
     #region Sub
