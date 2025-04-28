@@ -11,10 +11,11 @@ public class MenuDetectFinger : MenuBase
     [SerializeField] private float sendInterval = 0.1f;
     private float _timeSinceLastSend = 0f;
 
-    // Variables to track letter and consecutive matches
-    private string _previousLetter = string.Empty;
-    private int _sameLetterCount = 0;
-    private const int REQUIRED_CONSECUTIVE_MATCHES = 3;
+    // Replace consecutive matches with time-based detection
+    private string _currentLetter = string.Empty;
+    private float _letterDetectionTimer = 0f;
+    private const float LETTER_CONFIRMATION_TIME = 0.5f; // 0.5 seconds
+    private bool _isConfirmingLetter = false;
 
     protected override void OnRegisterEvents()
     {
@@ -38,9 +39,10 @@ public class MenuDetectFinger : MenuBase
     {
         base.Open(baseEventParamsUI);
         uiCamera.ShowWebCam();
-        // Reset tracking variables when opening menu
-        _previousLetter = string.Empty;
-        _sameLetterCount = 0;
+        // Reset variables
+        _currentLetter = string.Empty;
+        _letterDetectionTimer = 0f;
+        _isConfirmingLetter = false;
     }
 
     public override void Close()
@@ -52,6 +54,19 @@ public class MenuDetectFinger : MenuBase
     protected override void OnUpdate()
     {
         UpdateSendInterval();
+
+        // Update letter confirmation timer
+        if (_isConfirmingLetter)
+        {
+            _letterDetectionTimer += Time.deltaTime;
+
+            // If time threshold reached, confirm the letter
+            if (_letterDetectionTimer >= LETTER_CONFIRMATION_TIME)
+            {
+                _isConfirmingLetter = false;
+                UpdateLetterUI(_currentLetter, _currentConfidence);
+            }
+        }
     }
 
     private void UpdateSendInterval()
@@ -69,6 +84,9 @@ public class MenuDetectFinger : MenuBase
         TCPClient.Instance.SendData(KeyData.LetterPrediction, WebCamManager.Instance.ProcessingTexture);
     }
 
+    // Store current confidence for the UI update
+    private float _currentConfidence = 0f;
+
     private void OnStringReceivedHandleLetterPrediction(KeyData _, byte[] data)
     {
         string letterStr = System.Text.Encoding.UTF8.GetString(data);
@@ -79,35 +97,31 @@ public class MenuDetectFinger : MenuBase
             string confidenceStr = parts[1].Replace("Confidence: ", "").Trim();
             float confidence = float.Parse(confidenceStr) * 100f;
 
-            // Check if the letter matches the previous one
-            if (letter == _previousLetter)
+            // New letter detected
+            if (letter != _currentLetter)
             {
-                _sameLetterCount++;
+                _currentLetter = letter;
+                _currentConfidence = confidence;
+                _letterDetectionTimer = 0f;
+                _isConfirmingLetter = true;
 
-                // Only update UI when enough consecutive matches
-                if (_sameLetterCount >= REQUIRED_CONSECUTIVE_MATCHES)
-                {
-                    UpdateLetterUI(letter, confidence);
-                }
-            }
-            else
-            {
-                // New letter, reset counter
-                _previousLetter = letter;
-                _sameLetterCount = 1;
-
-                // Hide previous letter when detecting a new one
+                // Show detecting state
                 letterText.letterImage.enabled = false;
                 letterText.unknownObject.SetActiveIfNeeded(true);
                 letterText.letterText.SetText("Detecting...");
                 letterText.confidenceText.SetText("");
             }
+            else
+            {
+                // Update confidence for the same letter
+                _currentConfidence = confidence;
+            }
         }
         else
         {
             // Reset when no letter is recognized
-            _previousLetter = string.Empty;
-            _sameLetterCount = 0;
+            _currentLetter = string.Empty;
+            _isConfirmingLetter = false;
 
             letterText.letterImage.enabled = false;
             letterText.letterText.SetText("Unknown");

@@ -6,7 +6,7 @@ public class OnBoardingMenu : MenuBase
 {
     [Title("On Boarding"), Space]
     [SerializeField] private Button startButton;
-    
+
     protected override void OnRegisterEvents()
     {
         startButton.onClick.AddListener(OnStartButtonClicked);
@@ -29,19 +29,47 @@ public class OnBoardingMenu : MenuBase
         {
             if (!LoadSaveManager.Instance.AllowUseCamera)
             {
-                UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.allowUseCameraPopup);
+                var confirmParams = ScriptableObjectManager.Instance.allowUseCameraPopup;
+
+                var originalOnConfirm = confirmParams.onConfirm;
+
+                confirmParams.onConfirm = new UnityEngine.Events.UnityEvent();
+
+                confirmParams.onConfirm.AddListener(() =>
+                {
+                    originalOnConfirm?.Invoke();
+
+                    LoadSaveManager.Instance.SetAllowUseCamera();
+
+                    if (WebCamManager.HasWebCamDevice)
+                    {
+                        UIManager.OpenPopup(PopupType.OnBoarding, null);
+                    }
+                    else
+                    {
+                        UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.cameraNotDetectedPopup);
+                    }
+                });
+
+                UIManager.OpenPopup(PopupType.Confirm, confirmParams);
             }
             else
             {
                 if (WebCamManager.HasWebCamDevice)
                 {
-                    UIManager.OpenPopup(PopupType.OnBoarding, null);
+                    OpenOnBoardingPopup();
                 }
                 else
                 {
-                    UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.cameraNotDetectedPopup);   
+                    UIManager.OpenPopup(PopupType.Confirm, ScriptableObjectManager.Instance.cameraNotDetectedPopup);
                 }
             }
         }
+    }
+
+    public void OpenOnBoardingPopup()
+    {
+        AlkawaDebug.Log(ELogCategory.EDITOR, "OpenOnBoardingPopup");
+        UIManager.OpenPopup(PopupType.OnBoarding, null);
     }
 }

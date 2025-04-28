@@ -13,9 +13,12 @@ public class ConfirmPopupEventParams : ScriptableObject, IBaseEventParamsUI
     [ShowIf("@confirmPopupType == ConfirmPopupType.YesNo")] public string cancelText;
     [ShowIf("@confirmPopupType == ConfirmPopupType.YesNo")] public UnityEvent onConfirm;
     [ShowIf("@confirmPopupType == ConfirmPopupType.YesNo")] public UnityEvent onCancel;
-    
+    [ShowIf("@confirmPopupType == ConfirmPopupType.YesNo")] public UnityEvent onConfirmAndClosed;
+    [ShowIf("@confirmPopupType == ConfirmPopupType.YesNo")] public UnityEvent onCancelAndClosed;
+
     [ShowIf("@confirmPopupType == ConfirmPopupType.Okay")] public string okText;
     [ShowIf("@confirmPopupType == ConfirmPopupType.Okay")] public UnityEvent onOk;
+    [ShowIf("@confirmPopupType == ConfirmPopupType.Okay")] public UnityEvent onOkAndClosed;
 }
 
 [Serializable]

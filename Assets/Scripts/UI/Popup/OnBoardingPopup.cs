@@ -36,7 +36,6 @@ public class OnBoardingPopup : PopupBase
     [SerializeField] private Button readyButton;
     [SerializeField] private Button tryAgainButton;
     [SerializeField] private Button nextButton;
-    [SerializeField] private Button backButton;
     [SerializeField] private Button playButton;
 
     [Title("Scripts"), Space]

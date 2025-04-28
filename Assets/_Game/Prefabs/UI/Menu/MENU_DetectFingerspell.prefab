@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuType: 3
-  backButton: {fileID: 3377785572900312501}
+  backButton: {fileID: 5006942580958324752}
   uiCamera: {fileID: 7780190830589093435}
   letterText: {fileID: 5033353571857073672}
   sendInterval: 0.1
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 4248723835686928166}
   - component: {fileID: 4766952147734331733}
   - component: {fileID: 6628282893071602682}
-  - component: {fileID: 3377785572900312501}
+  - component: {fileID: 5006942580958324752}
   m_Layer: 0
   m_Name: BackButton
   m_TagString: Untagged
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3377785572900312501
+--- !u!114 &5006942580958324752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3595456407114999543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 65addbc548d28ce47bdf3c16fe649e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:

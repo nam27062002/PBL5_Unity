@@ -19,10 +19,16 @@ MonoBehaviour:
   cancelText: No
   onConfirm:
     m_PersistentCalls:
+      m_Calls: []
+  onCancel:
+    m_PersistentCalls:
+      m_Calls: []
+  onConfirmAndClosed:
+    m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2941240521936205155, guid: 645da4fd04ec2364a8a309ef1ad25aa3, type: 3}
-        m_TargetAssemblyTypeName: LoadSaveManager, Assembly-CSharp
-        m_MethodName: SetAllowUseCamera
+      - m_Target: {fileID: 8172718165291373168, guid: cb1fe76603e02ef4da3689df5a46ceea, type: 3}
+        m_TargetAssemblyTypeName: OnBoardingMenu, Assembly-CSharp
+        m_MethodName: OpenOnBoardingPopup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -32,10 +38,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onCancel:
+  onCancelAndClosed:
     m_PersistentCalls:
       m_Calls: []
   okText: 
   onOk:
+    m_PersistentCalls:
+      m_Calls: []
+  onOkAndClosed:
     m_PersistentCalls:
       m_Calls: []
