@@ -9,19 +9,33 @@ using Sirenix.OdinInspector;
 public class TCPClient : SingletonMonoBehavior<TCPClient>
 {
     [Title("Server Config")]
-    [SerializeField] private string serverIP = "127.0.0.1";
-    [SerializeField] private int serverPort = 5005;
+    [ReadOnly][SerializeField] private string serverIP = "127.0.0.1";
+    [ReadOnly][SerializeField] private int serverPort = 5005;
+
+    [Button("Open Config File")]
+    private void OpenConfigFile()
+    {
+        string configPath = TCPConfig.GetConfigFilePath();
+        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{configPath}\"");
+    }
 
     private TcpClient _tcpClient;
     private NetworkStream _stream;
     private Thread _receiveThread;
     private bool _isRunning = true;
     public event Action<KeyData, byte[]> OnDataReceived;
-
-    // Phương thức để kiểm tra xem có thành phần nào đăng ký để nhận dữ liệu không
+    
     public bool HasReceiverRegistered()
     {
         return OnDataReceived != null;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        var config = TCPConfig.GetConfig();
+        serverIP = config.serverIP;
+        serverPort = config.serverPort;
     }
 
     private void Start()
