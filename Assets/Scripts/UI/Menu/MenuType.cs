@@ -6,4 +6,5 @@
     DetectFinger = 3,
     FingerSpellAZ = 4,
     Loading = 5,
+    ConnectToServer = 6,
 }

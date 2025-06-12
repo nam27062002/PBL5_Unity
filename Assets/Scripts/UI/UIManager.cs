@@ -19,7 +19,7 @@ public class UIManager : SingletonMonoBehavior<UIManager>
         HideAllPopups();
     }
 
-    public void OpenPopup(PopupType popupType, IBaseEventParamsUI baseEventParamsUI)
+    public void OpenPopup(PopupType popupType, IBaseEventParamsUI baseEventParamsUI = null)
     {
         ClosePopup();
         _currentPopup = allPopups[popupType];
@@ -34,7 +34,7 @@ public class UIManager : SingletonMonoBehavior<UIManager>
         HideGreyBackground();
     }
 
-    public void OpenMenu(MenuType menuType, IBaseEventParamsUI baseEventParamsUI)
+    public void OpenMenu(MenuType menuType, IBaseEventParamsUI baseEventParamsUI = null)
     {
         if (_currentMenu != null)
         {

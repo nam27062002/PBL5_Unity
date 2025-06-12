@@ -34,7 +34,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
         OnLoadComplete -= HandleLoadComplete;
     }
 
-    public void Loading(ESceneType eSceneType)
+    private void Loading(ESceneType eSceneType)
     {
         SceneLoader.LoadSceneAsync(ESceneType.Loading, LoadSceneMode.Additive);
         _nextScene = eSceneType;

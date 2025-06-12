@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Sirenix.OdinInspector;
+using System.Threading.Tasks;
 
 [DefaultExecutionOrder(-19550)]
 public class TCPClient : SingletonMonoBehavior<TCPClient>
@@ -12,19 +13,20 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
     [ReadOnly][SerializeField] private string serverIP = "127.0.0.1";
     [ReadOnly][SerializeField] private int serverPort = 5005;
 
-    [Button("Open Config File")]
-    private void OpenConfigFile()
-    {
-        string configPath = TCPConfig.GetConfigFilePath();
-        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{configPath}\"");
-    }
+    // [Button("Open Config File")]
+    // private void OpenConfigFile()
+    // {
+    //     string configPath = TCPConfig.GetConfigFilePath();
+    //     System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{configPath}\"");
+    // }
 
     private TcpClient _tcpClient;
     private NetworkStream _stream;
     private Thread _receiveThread;
     private bool _isRunning = true;
     public event Action<KeyData, byte[]> OnDataReceived;
-    
+    public event Action<bool> OnConnectResult;
+
     public bool HasReceiverRegistered()
     {
         return OnDataReceived != null;
@@ -33,17 +35,17 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
     protected override void Awake()
     {
         base.Awake();
-        var config = TCPConfig.GetConfig();
-        serverIP = config.serverIP;
-        serverPort = config.serverPort;
+        // var config = TCPConfig.GetConfig();
+        // serverIP = config.serverIP;
+        // serverPort = config.serverPort;
     }
 
     private void Start()
     {
-        ConnectToServer();
+        //ConnectToServer();
     }
 
-    public void ConnectToServer()
+    public bool TryConnectToServer()
     {
         try
         {
@@ -60,10 +62,14 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
             _receiveThread.Start();
 
             AlkawaDebug.Log(ELogCategory.TCP, "Connection successful and receive thread started.");
+            OnConnectResult?.Invoke(true);
+            return true;
         }
         catch (Exception ex)
         {
             AlkawaDebug.LogError(ELogCategory.TCP, $"Error connecting to server: {ex.Message}");
+            OnConnectResult?.Invoke(false);
+            return false;
         }
     }
 
@@ -196,5 +202,54 @@ public class TCPClient : SingletonMonoBehavior<TCPClient>
     {
         base.OnDestroy();
         DisconnectToServer();
+    }
+
+    public void SetServerConfig(string ip, int port)
+    {
+        serverIP = ip;
+        serverPort = port;
+    }
+
+    public async Task<bool> TryConnectToServerAsync(float timeoutSeconds = 3f, int retryDelayMs = 200)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        Exception lastException = null;
+        while (sw.Elapsed.TotalSeconds < timeoutSeconds)
+        {
+            try
+            {
+                AlkawaDebug.Log(ELogCategory.TCP, $"Connecting to server {serverIP}:{serverPort}...");
+                _tcpClient = new TcpClient();
+                var connectTask = _tcpClient.ConnectAsync(serverIP, serverPort);
+                var delayTask = Task.Delay(retryDelayMs);
+                var finishedTask = await Task.WhenAny(connectTask, delayTask);
+                if (connectTask.IsCompletedSuccessfully)
+                {
+                    _stream = _tcpClient.GetStream();
+                    _isRunning = true;
+                    _receiveThread = new Thread(ReceiveData)
+                    {
+                        IsBackground = true
+                    };
+                    _receiveThread.Start();
+                    AlkawaDebug.Log(ELogCategory.TCP, "Connection successful and receive thread started.");
+                    OnConnectResult?.Invoke(true);
+                    return true;
+                }
+                else
+                {
+                    _tcpClient.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                lastException = ex;
+                AlkawaDebug.LogWarning(ELogCategory.TCP, $"Retry connect failed: {ex.Message}");
+            }
+            await Task.Delay(retryDelayMs);
+        }
+        AlkawaDebug.LogError(ELogCategory.TCP, $"Error connecting to server after {timeoutSeconds}s: {lastException?.Message}");
+        OnConnectResult?.Invoke(false);
+        return false;
     }
 }

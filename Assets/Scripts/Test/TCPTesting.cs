@@ -25,7 +25,7 @@ public class TCPTesting : MonoBehaviour
     [Button("Send Data To Server")]
     private void SendDataToServer()
     {
-        tcpClient.ConnectToServer();
+        tcpClient.TryConnectToServer();
 
         if (IsTexture)
         {
